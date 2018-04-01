@@ -120,6 +120,7 @@
     <Compile Include="Models\Employees.cs" />
     <Compile Include="Models\inserViewModel.cs" />
     <Compile Include="Models\Orders.cs" />
+    <Compile Include="Models\QueryViewModel.cs" />
     <Compile Include="Models\Shippers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

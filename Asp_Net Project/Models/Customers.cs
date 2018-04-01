@@ -13,7 +13,6 @@ namespace Asp_Net_Project.Models
 
         public string CompanyName { get; set; }
 
-        [DisplayName("客戶名稱")]
         public string ContactName { get; set;}
 
         public string Address { get; set;}
