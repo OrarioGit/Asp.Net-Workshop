@@ -11,7 +11,43 @@ namespace Asp_Net_Project.Controllers
         // GET: Sales
         public ActionResult Index()
         {
-            return View();
+            Models.QueryViewModel QueryModel = new Models.QueryViewModel();
+
+            //建立負責員工data
+            List<SelectListItem> EmployeeNameList = new List<SelectListItem>();
+
+            EmployeeNameList.Add(new SelectListItem()
+            {
+                Text = "Andy",
+                Value = "0"
+            });
+            EmployeeNameList.Add(new SelectListItem()
+            {
+                Text = "Jack",
+                Value = "1"
+            });
+
+
+            ViewBag.EmployeeName = EmployeeNameList;
+
+            //建立公司名稱data
+            List<SelectListItem> CompanyNameList = new List<SelectListItem>();
+
+            CompanyNameList.Add(new SelectListItem()
+            {
+                Text = "Company A",
+                Value = "0"
+            });
+            CompanyNameList.Add(new SelectListItem()
+            {
+                Text = "Company B",
+                Value = "1"
+            });
+
+
+            ViewBag.CompanyName = CompanyNameList;
+
+            return View(QueryModel);
         }
 
         //新增訂單

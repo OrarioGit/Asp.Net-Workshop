@@ -18,7 +18,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, "請選擇")
+                @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, "請選擇", new { @class = "form-control"})
                 @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -26,22 +26,20 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, "請選擇")
+                @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, "請選擇", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control"})
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
             </div>
-        </div>
 
-        <div class="form-group">
             @Html.LabelFor(model => model.RequiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-4">
                 @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.RequiredDate, "", new { @class = "text-danger" })
             </div>
@@ -58,7 +56,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, "請選擇")
+                @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, "請選擇", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -73,15 +71,13 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-4">
                 @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ShipCountry, "", new { @class = "text-danger" })
             </div>
-        </div>
 
-        <div class="form-group">
             @Html.LabelFor(model => model.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-4">
                 @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ShipCity, "", new { @class = "text-danger" })
             </div>
@@ -89,15 +85,13 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-4">
                 @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ShipRegion, "", new { @class = "text-danger" })
             </div>
-        </div>
 
-        <div class="form-group">
             @Html.LabelFor(model => model.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-4">
                 @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ShipPostalCode, "", new { @class = "text-danger" })
             </div>
