@@ -118,6 +118,7 @@
     </Compile>
     <Compile Include="Models\Customers.cs" />
     <Compile Include="Models\Employees.cs" />
+    <Compile Include="Models\inserViewModel.cs" />
     <Compile Include="Models\Orders.cs" />
     <Compile Include="Models\Shippers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -127,8 +128,9 @@
     <None Include="packages.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Sales\InsertOrders.cshtml" />
+    <Content Include="Views\Sales\xInsertOrders.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Sales\InsertOrders.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

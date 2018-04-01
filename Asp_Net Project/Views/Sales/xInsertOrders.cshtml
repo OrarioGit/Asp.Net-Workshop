@@ -1,0 +1,113 @@
+﻿@model Asp_Net_Project.Models.InserViewModel
+
+
+@{
+    ViewBag.Title = "InsertOrders";
+}
+
+<h2>新增訂單頁面</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>Orders</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Customers.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.Customers.ContactName, (List<SelectListItem>)ViewBag.myList, "請選擇")
+            @Html.ValidationMessageFor(model => model.Customers.ContactName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Orders.OrderDate, new { @type = "date", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Orders.OrderDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.RequiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Orders.RequiredDate, new { @type = "date", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Orders.RequiredDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.ShippedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Orders.ShippedDate, new { @type = "date", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Orders.ShippedDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.Freight, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Orders.Freight, new { @type = "number", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Orders.Freight, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.ShipAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Orders.ShipAddress, new { @type = "text", @maxlength = "60", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Orders.ShipAddress, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Orders.ShipCity, new { @type = "text", @maxlength = "15", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Orders.ShipCity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Orders.ShipRegion, new { @type = "text", @maxlength = "15", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Orders.ShipRegion, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Orders.ShipPostalCode, new { @type = "text", @maxlength = "10", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Orders.ShipPostalCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Orders.ShipCountry, new { @type = "text", @maxlength = "15", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Orders.ShipCountry, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
