@@ -7,6 +7,7 @@ using System.ComponentModel;
 
 namespace Asp_Net_Project.Models
 {
+    
     public class Orders
     {
         public int OrderID { get; set;}
