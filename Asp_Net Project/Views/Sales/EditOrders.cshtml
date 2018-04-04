@@ -1,0 +1,130 @@
+﻿@model Asp_Net_Project.Models.InserViewModel
+
+@{
+    ViewBag.Title = "EditOrders";
+}
+
+<h2>EditOrders</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>InserViewModel</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, "請選擇", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, "請選擇", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.List.OrderDate.ToString("yyyy-MM-dd")})
+            @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.RequiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.List.RequiredDate.ToString("yyyy-MM-dd") })
+            @Html.ValidationMessageFor(model => model.RequiredDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.List.ShippedDate.ToString("yyyy-MM-dd") })
+            @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, "請選擇", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Freight, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Freight, new { @type = "number", @class = "form-control", @Value = @ViewBag.List.Freight })
+            @Html.ValidationMessageFor(model => model.Freight, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control", @Value = @ViewBag.List.ShipCountry })
+            @Html.ValidationMessageFor(model => model.ShipCountry, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control", @Value = @ViewBag.List.ShipCity })
+            @Html.ValidationMessageFor(model => model.ShipCity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control", @Value = @ViewBag.List.ShipRegion })
+            @Html.ValidationMessageFor(model => model.ShipRegion, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control", @Value = @ViewBag.List.ShipPostalCode })
+            @Html.ValidationMessageFor(model => model.ShipPostalCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control", @Value = @ViewBag.List.ShipAddress })
+            @Html.ValidationMessageFor(model => model.ShipAddress, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

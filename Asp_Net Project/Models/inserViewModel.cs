@@ -9,6 +9,7 @@ namespace Asp_Net_Project.Models
 {
     public class InserViewModel
     {
+        [DisplayName("訂單編號")]
         public int OrderID { get; set; }
 
         [DisplayName("客戶名稱")]

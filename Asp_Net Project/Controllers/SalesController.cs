@@ -15,7 +15,8 @@ namespace Asp_Net_Project.Controllers
         static List<object> CustomerList = new List<object>();
         static List<object> ShippersList = new List<object>();
         
-        // GET: Sales
+        // GET: 查詢頁面
+        [HttpGet()]
         public ActionResult Index()
         {
             if (OrderList.Count == 0)
@@ -32,6 +33,45 @@ namespace Asp_Net_Project.Controllers
             ViewBag.CompanyName = SetCompanyNameList();
 
             return View(QueryModel);
+        }
+
+        //POST: 查詢結果
+        [HttpPost()]
+        public ActionResult QueryResult(FormCollection from)
+        {
+            ViewBag.List = OrderList;
+            return View();
+        }
+
+        //GET: 修改頁面
+        [HttpGet()]
+        public ActionResult EditOrders(int id)
+        {
+            if (OrderList.Count == 0)
+            {
+                DataSetUp();
+            }
+            
+            //建立客戶名稱data
+            List<SelectListItem> ContactNameList = new List<SelectListItem>();
+
+            for (int j = 0; j < CustomerList.Count; j++)
+            {
+                ContactNameList.Add(new SelectListItem()
+                {
+                    Text = ((Models.Customers)CustomerList[j]).ContactName,
+                    Value = j.ToString()
+                });
+            }
+
+            ViewBag.ContactName = ContactNameList;
+
+            ViewBag.EmployeeName = SetEmployeeNameList();
+
+            ViewBag.CompanyName = SetCompanyNameList();
+
+            ViewBag.List = OrderList[id];
+            return View();
         }
 
         //新增訂單
@@ -114,7 +154,7 @@ namespace Asp_Net_Project.Controllers
                     RequiredDate = rngDate,
                     ShippedDate = rngDate.AddDays(5),
                     CompanyName = ((Models.Shippers)ShippersList[x%5]).CompanyName,
-                    Freight = Decimal.Parse(faker.Commerce.Price(100, 1000, 0, "")),
+                    Freight = Decimal.Parse(faker.Commerce.Price(1000, 2000, 0, "")),
                     ShipCountry = faker.Address.Country(),
                     ShipCity = faker.Address.City(),
                     ShipRegion = faker.Address.State(),
