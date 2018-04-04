@@ -9,6 +9,8 @@ namespace Asp_Net_Project.Models
 {
     public class InserViewModel
     {
+        public int OrderID { get; set; }
+
         [DisplayName("客戶名稱")]
         [Required()]
         public string ContactName { get; set; }
