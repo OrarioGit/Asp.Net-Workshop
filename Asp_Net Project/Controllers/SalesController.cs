@@ -15,7 +15,7 @@ namespace Asp_Net_Project.Controllers
         static List<object> CustomerList = new List<object>();
         static List<object> ShippersList = new List<object>();
         static List<SelectListItem> EmployeeNameList = new List<SelectListItem>();
-        static List<SelectListItem> CompanyNameList= new List<SelectListItem>();
+        static List<SelectListItem> CompanyNameList = new List<SelectListItem>();
         static List<SelectListItem> ContactNameList = new List<SelectListItem>();
 
         // GET: 查詢頁面
@@ -29,11 +29,11 @@ namespace Asp_Net_Project.Controllers
                 SetEmployeeNameList();
                 SetContactNameList();
             }
-            
+
 
             Models.QueryViewModel QueryModel = new Models.QueryViewModel();
-            
-            
+
+
             ViewBag.EmployeeName = EmployeeNameList;
 
             ViewBag.CompanyName = CompanyNameList;
@@ -48,7 +48,7 @@ namespace Asp_Net_Project.Controllers
             ViewBag.form = form;
 
             List<object> ResultList = OrderList;
-            
+
             for (int i = 1; i < form.Count; i++)
             {
                 if (form[i] != "")
@@ -105,18 +105,93 @@ namespace Asp_Net_Project.Controllers
                 SetCompanyNameList();
             }
 
+            int CN_List_ID = -1;//ContactNameList_id
+            int EN_List_ID = -1;//EmployeeNameList_id
+            int CpN_List_ID = -1;//CompanyNameList_id
 
-            ViewBag.ContactName = ContactNameList;
+            for (int i = 0; i < 5; i++)
+            {
+                if (CN_List_ID == -1)
+                {
+                    if (ContactNameList[i].Text == ((Models.InserViewModel)OrderList[id]).ContactName)
+                    {
+                        CN_List_ID = i;
+                    }
+                }
 
-            ViewBag.EmployeeName = EmployeeNameList;
+                if(EN_List_ID == -1)
+                {
+                    if (EmployeeNameList[i].Text == ((Models.InserViewModel)OrderList[id]).EmployeeName)
+                    {
+                        EN_List_ID = i;
+                    }
+                }
 
-            ViewBag.CompanyName = CompanyNameList;
+                if (CpN_List_ID == -1)
+                {
+                    if (CompanyNameList[i].Text == ((Models.InserViewModel)OrderList[id]).CompanyName)
+                    {
+                        CpN_List_ID = i;
+                    }
+                }
+            }
+
+
+            //設定下拉式選單預設值
+            var Edit_ContactNameList = ContactNameList;
+            Edit_ContactNameList[CN_List_ID].Selected = true;
+
+            var Edit_EmployeeNameList = EmployeeNameList;
+            Edit_EmployeeNameList[EN_List_ID].Selected = true;
+
+            var Edit_CompanyNameList = CompanyNameList;
+            Edit_CompanyNameList[CpN_List_ID].Selected = true;
+
+            ViewBag.ContactName = Edit_ContactNameList;
+
+            ViewBag.EmployeeName = Edit_EmployeeNameList;
+
+            ViewBag.CompanyName = Edit_CompanyNameList;
 
             ViewBag.List = OrderList[id];
             return View();
         }
 
-        //新增訂單
+        //POST:修改訂單儲存
+        [HttpPost()]
+        public ActionResult EditOrders(FormCollection form)
+        {
+            int Form_OrderID = int.Parse(form.Get("OrderID"));
+            int form_ContactName = int.Parse(form.Get("ContactName"));
+            int form_EmployeeName = int.Parse(form.Get("EmployeeName"));
+            int form_CompanyName = int.Parse(form.Get("CompanyName"));
+
+            int Update_Index = OrderList.IndexOf(OrderList.Find(item => ((Models.InserViewModel)item).OrderID == Form_OrderID));
+
+            OrderList[Update_Index] = new Models.InserViewModel
+            {
+                OrderID = Form_OrderID,
+                ContactName = ((Models.Customers)CustomerList[form_ContactName]).ContactName,
+                EmployeeName = ((Models.Employees)EmployeeList[form_EmployeeName]).LastName,
+                OrderDate = Convert.ToDateTime(form.Get("OrderDate")),
+                RequiredDate = Convert.ToDateTime(form.Get("RequiredDate")),
+                ShippedDate = Convert.ToDateTime(form.Get("ShippedDate")),
+                CompanyName = ((Models.Shippers)ShippersList[form_CompanyName]).CompanyName,
+                Freight = int.Parse(form.Get("Freight")),
+                ShipCountry = form.Get("ShipCountry"),
+                ShipCity = form.Get("ShipCity"),
+                ShipRegion = form.Get("ShipRegion"),
+                ShipPostalCode = form.Get("ShipPostalCode"),
+                ShipAddress = form.Get("ShipAddress")
+            };
+
+            ViewBag.EmployeeName = EmployeeNameList;
+
+            ViewBag.CompanyName = CompanyNameList;
+            return View("Index");
+        }
+
+        //新增訂單頁面
         [HttpGet()]
         public ActionResult InsertOrders()
         {
@@ -138,7 +213,7 @@ namespace Asp_Net_Project.Controllers
             return View();
         }
 
-        //新增訂單post
+        //POST: 新增訂單儲存
         [HttpPost()]
         public ActionResult InsertOrders(FormCollection form)
         {
@@ -236,7 +311,8 @@ namespace Asp_Net_Project.Controllers
                 EmployeeNameList.Add(new SelectListItem()
                 {
                     Text = ((Models.Employees)EmployeeList[i]).LastName,
-                    Value = i.ToString()
+                    Value = i.ToString(),
+                    Selected = false
                 });
             }
         }
@@ -249,7 +325,8 @@ namespace Asp_Net_Project.Controllers
                 CompanyNameList.Add(new SelectListItem()
                 {
                     Text = ((Models.Shippers)ShippersList[j]).CompanyName,
-                    Value = j.ToString()
+                    Value = j.ToString(),
+                    Selected = false
                 });
             }
         }
@@ -262,7 +339,8 @@ namespace Asp_Net_Project.Controllers
                 ContactNameList.Add(new SelectListItem()
                 {
                     Text = ((Models.Customers)CustomerList[j]).ContactName,
-                    Value = j.ToString()
+                    Value = j.ToString(),
+                    Selected = false
                 });
             }
         }

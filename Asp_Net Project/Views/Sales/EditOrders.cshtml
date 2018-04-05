@@ -18,7 +18,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = @ViewBag.List.OrderID } })
             @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -26,7 +26,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, "請選擇", new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -34,7 +34,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, "請選擇", new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -64,7 +64,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, "請選擇", new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -122,7 +122,8 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("刪除本筆訂單", "Index")
+    @Html.ActionLink("回前一頁", "Index")
 </div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
