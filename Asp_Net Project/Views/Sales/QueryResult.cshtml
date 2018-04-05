@@ -46,7 +46,7 @@
             @item.Freight.ToString("N0")
         </td>
         <td>
-            @Html.ActionLink("Edit", "Index", new { id= item.OrderID }) |
+            @Html.ActionLink("Edit", "EditOrders", new { id= item.OrderID }) |
             @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
         </td>
     </tr>

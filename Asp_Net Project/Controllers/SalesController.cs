@@ -14,7 +14,10 @@ namespace Asp_Net_Project.Controllers
         static List<object> EmployeeList = new List<object>();
         static List<object> CustomerList = new List<object>();
         static List<object> ShippersList = new List<object>();
-        
+        static List<SelectListItem> EmployeeNameList = new List<SelectListItem>();
+        static List<SelectListItem> CompanyNameList= new List<SelectListItem>();
+        static List<SelectListItem> ContactNameList = new List<SelectListItem>();
+
         // GET: 查詢頁面
         [HttpGet()]
         public ActionResult Index()
@@ -22,24 +25,71 @@ namespace Asp_Net_Project.Controllers
             if (OrderList.Count == 0)
             {
                 DataSetUp();
+                SetCompanyNameList();
+                SetEmployeeNameList();
+                SetContactNameList();
             }
             
 
             Models.QueryViewModel QueryModel = new Models.QueryViewModel();
             
             
-            ViewBag.EmployeeName = SetEmployeeNameList();
+            ViewBag.EmployeeName = EmployeeNameList;
 
-            ViewBag.CompanyName = SetCompanyNameList();
+            ViewBag.CompanyName = CompanyNameList;
 
             return View(QueryModel);
         }
 
         //POST: 查詢結果
         [HttpPost()]
-        public ActionResult QueryResult(FormCollection from)
+        public ActionResult QueryResult(FormCollection form)
         {
-            ViewBag.List = OrderList;
+            ViewBag.form = form;
+
+            List<object> ResultList = OrderList;
+            
+            for (int i = 1; i < form.Count; i++)
+            {
+                if (form[i] != "")
+                {
+                    var form_item = form.GetKey(i);
+                    int src_index;
+                    string src_value;
+
+                    switch (form_item)
+                    {
+                        case "OrderID":
+                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).OrderID == int.Parse(form[i]));
+                            break;
+                        case "ContactName":
+                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).ContactName.Contains(form[i]));
+                            break;
+                        case "EmployeeName":
+                            src_index = int.Parse(form[i]);
+                            src_value = ((Models.Employees)EmployeeList[src_index]).LastName;
+                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).EmployeeName.Contains(src_value));
+                            break;
+                        case "CompanyName":
+                            src_index = int.Parse(form[i]);
+                            src_value = ((Models.Shippers)ShippersList[src_index]).CompanyName;
+                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).CompanyName.Contains(src_value));
+                            break;
+                        case "OrderDate":
+                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).OrderDate.ToString("yyyy-MM-dd") == form[i]);
+                            break;
+                        case "ShippedDate":
+                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).ShippedDate.ToString("yyyy-MM-dd") == form[i]);
+                            break;
+                        case "RequiredDate":
+                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).RequiredDate.ToString("yyyy-MM-dd") == form[i]);
+                            break;
+                    }
+                }
+            }
+
+            ViewBag.List = ResultList;
+
             return View();
         }
 
@@ -50,25 +100,17 @@ namespace Asp_Net_Project.Controllers
             if (OrderList.Count == 0)
             {
                 DataSetUp();
+                SetCompanyNameList();
+                SetEmployeeNameList();
+                SetCompanyNameList();
             }
-            
-            //建立客戶名稱data
-            List<SelectListItem> ContactNameList = new List<SelectListItem>();
 
-            for (int j = 0; j < CustomerList.Count; j++)
-            {
-                ContactNameList.Add(new SelectListItem()
-                {
-                    Text = ((Models.Customers)CustomerList[j]).ContactName,
-                    Value = j.ToString()
-                });
-            }
 
             ViewBag.ContactName = ContactNameList;
 
-            ViewBag.EmployeeName = SetEmployeeNameList();
+            ViewBag.EmployeeName = EmployeeNameList;
 
-            ViewBag.CompanyName = SetCompanyNameList();
+            ViewBag.CompanyName = CompanyNameList;
 
             ViewBag.List = OrderList[id];
             return View();
@@ -80,29 +122,19 @@ namespace Asp_Net_Project.Controllers
             if (OrderList.Count == 0)
             {
                 DataSetUp();
+                SetCompanyNameList();
+                SetEmployeeNameList();
+                SetCompanyNameList();
             }
 
-            Models.InserViewModel insert_model = new Models.InserViewModel();
-
-            //建立客戶名稱data
-            List<SelectListItem> ContactNameList = new List<SelectListItem>();
-
-            for (int j = 0; j < CustomerList.Count; j++)
-            {
-                ContactNameList.Add(new SelectListItem()
-                {
-                    Text = ((Models.Customers)CustomerList[j]).ContactName,
-                    Value = j.ToString()
-                });
-            }
 
             ViewBag.ContactName = ContactNameList;
 
-            ViewBag.EmployeeName = SetEmployeeNameList();
+            ViewBag.EmployeeName = EmployeeNameList;
 
-            ViewBag.CompanyName = SetCompanyNameList();
+            ViewBag.CompanyName = CompanyNameList;
 
-            return View(insert_model);
+            return View();
         }
 
         //建立假資料
@@ -165,11 +197,8 @@ namespace Asp_Net_Project.Controllers
         }
 
         //建立負責員工下拉式選單data
-        public List<SelectListItem> SetEmployeeNameList()
+        public void SetEmployeeNameList()
         {
-            
-            List<SelectListItem> EmployeeNameList = new List<SelectListItem>();
-
             for (int i = 0; i < EmployeeList.Count; i++)
             {
                 EmployeeNameList.Add(new SelectListItem()
@@ -178,26 +207,32 @@ namespace Asp_Net_Project.Controllers
                     Value = i.ToString()
                 });
             }
-
-            return EmployeeNameList;
         }
 
-        //建立公司名稱下拉式選單data
-        public List<SelectListItem> SetCompanyNameList()
+        //建立運輸公司名稱下拉式選單data
+        public void SetCompanyNameList()
         {
-            
-            List<SelectListItem> CompanyNameList = new List<SelectListItem>();
-
             for (int j = 0; j < CustomerList.Count; j++)
             {
                 CompanyNameList.Add(new SelectListItem()
                 {
-                    Text = ((Models.Customers)CustomerList[j]).CompanyName,
+                    Text = ((Models.Shippers)ShippersList[j]).CompanyName,
                     Value = j.ToString()
                 });
             }
+        }
 
-            return CompanyNameList;
+        //建立客戶名稱下拉式選單data
+        public void SetContactNameList()
+        {
+            for (int j = 0; j < CustomerList.Count; j++)
+            {
+                ContactNameList.Add(new SelectListItem()
+                {
+                    Text = ((Models.Customers)CustomerList[j]).ContactName,
+                    Value = j.ToString()
+                });
+            }
         }
     }
 }
