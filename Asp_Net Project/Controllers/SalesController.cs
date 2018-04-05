@@ -104,48 +104,49 @@ namespace Asp_Net_Project.Controllers
                 SetEmployeeNameList();
                 SetCompanyNameList();
             }
+            int list_index = OrderList.IndexOf(OrderList.Find(item => ((Models.InserViewModel)item).OrderID == id)); 
 
-            int CN_List_ID = -1;//ContactNameList_id
-            int EN_List_ID = -1;//EmployeeNameList_id
-            int CpN_List_ID = -1;//CompanyNameList_id
+            //int CN_List_ID = -1;//ContactNameList_id
+            //int EN_List_ID = -1;//EmployeeNameList_id
+            //int CpN_List_ID = -1;//CompanyNameList_id
 
-            for (int i = 0; i < 5; i++)
-            {
-                if (CN_List_ID == -1)
-                {
-                    if (ContactNameList[i].Text == ((Models.InserViewModel)OrderList[id]).ContactName)
-                    {
-                        CN_List_ID = i;
-                    }
-                }
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    if (CN_List_ID == -1)
+            //    {
+            //        if (ContactNameList[i].Text == ((Models.InserViewModel)OrderList[id]).ContactName)
+            //        {
+            //            CN_List_ID = i;
+            //        }
+            //    }
 
-                if(EN_List_ID == -1)
-                {
-                    if (EmployeeNameList[i].Text == ((Models.InserViewModel)OrderList[id]).EmployeeName)
-                    {
-                        EN_List_ID = i;
-                    }
-                }
+            //    if(EN_List_ID == -1)
+            //    {
+            //        if (EmployeeNameList[i].Text == ((Models.InserViewModel)OrderList[id]).EmployeeName)
+            //        {
+            //            EN_List_ID = i;
+            //        }
+            //    }
 
-                if (CpN_List_ID == -1)
-                {
-                    if (CompanyNameList[i].Text == ((Models.InserViewModel)OrderList[id]).CompanyName)
-                    {
-                        CpN_List_ID = i;
-                    }
-                }
-            }
+            //    if (CpN_List_ID == -1)
+            //    {
+            //        if (CompanyNameList[i].Text == ((Models.InserViewModel)OrderList[id]).CompanyName)
+            //        {
+            //            CpN_List_ID = i;
+            //        }
+            //    }
+            //}
 
 
             //設定下拉式選單預設值
             var Edit_ContactNameList = ContactNameList;
-            Edit_ContactNameList[CN_List_ID].Selected = true;
+            //Edit_ContactNameList[CN_List_ID].Selected = true;
 
             var Edit_EmployeeNameList = EmployeeNameList;
-            Edit_EmployeeNameList[EN_List_ID].Selected = true;
+            //Edit_EmployeeNameList[EN_List_ID].Selected = true;
 
             var Edit_CompanyNameList = CompanyNameList;
-            Edit_CompanyNameList[CpN_List_ID].Selected = true;
+            //Edit_CompanyNameList[CpN_List_ID].Selected = true;
 
             ViewBag.ContactName = Edit_ContactNameList;
 
@@ -153,7 +154,7 @@ namespace Asp_Net_Project.Controllers
 
             ViewBag.CompanyName = Edit_CompanyNameList;
 
-            ViewBag.List = OrderList[id];
+            ViewBag.List = OrderList[list_index];
             return View();
         }
 
@@ -223,7 +224,7 @@ namespace Asp_Net_Project.Controllers
 
             OrderList.Add(new Models.InserViewModel
             {
-                OrderID = OrderList.Count,
+                OrderID = ((Models.InserViewModel)OrderList[OrderList.Count-1]).OrderID + 1,
                 ContactName = ((Models.Customers)CustomerList[form_ContactName]).ContactName,
                 EmployeeName = ((Models.Employees)EmployeeList[form_EmployeeName]).LastName,
                 OrderDate = Convert.ToDateTime(form.Get("OrderDate")),
@@ -241,6 +242,19 @@ namespace Asp_Net_Project.Controllers
             ViewBag.EmployeeName = EmployeeNameList;
 
             ViewBag.CompanyName = CompanyNameList;
+            return View("Index");
+        }
+
+        //GET: 刪除訂單動作
+        [HttpGet]
+        public ActionResult DeleteOrders(int id)
+        {
+            OrderList.Remove(OrderList.Find(item => ((Models.InserViewModel)item).OrderID == id));
+
+            ViewBag.EmployeeName = EmployeeNameList;
+
+            ViewBag.CompanyName = CompanyNameList;
+
             return View("Index");
         }
 
