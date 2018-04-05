@@ -7,7 +7,7 @@
 <h2>新增訂單頁面</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("InsertOrders", "Sales")) 
 {
     @Html.AntiForgeryToken()
     
@@ -107,14 +107,14 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="存檔" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("回前一頁", "Index")
 </div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>

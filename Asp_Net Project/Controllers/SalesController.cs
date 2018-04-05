@@ -117,6 +117,7 @@ namespace Asp_Net_Project.Controllers
         }
 
         //新增訂單
+        [HttpGet()]
         public ActionResult InsertOrders()
         {
             if (OrderList.Count == 0)
@@ -135,6 +136,37 @@ namespace Asp_Net_Project.Controllers
             ViewBag.CompanyName = CompanyNameList;
 
             return View();
+        }
+
+        //新增訂單post
+        [HttpPost()]
+        public ActionResult InsertOrders(FormCollection form)
+        {
+            int form_ContactName = int.Parse(form.Get("ContactName"));
+            int form_EmployeeName = int.Parse(form.Get("EmployeeName"));
+            int form_CompanyName = int.Parse(form.Get("CompanyName"));
+
+            OrderList.Add(new Models.InserViewModel
+            {
+                OrderID = OrderList.Count,
+                ContactName = ((Models.Customers)CustomerList[form_ContactName]).ContactName,
+                EmployeeName = ((Models.Employees)EmployeeList[form_EmployeeName]).LastName,
+                OrderDate = Convert.ToDateTime(form.Get("OrderDate")),
+                RequiredDate = Convert.ToDateTime(form.Get("RequiredDate")),
+                ShippedDate = Convert.ToDateTime(form.Get("ShippedDate")),
+                CompanyName = ((Models.Shippers)ShippersList[form_CompanyName]).CompanyName,
+                Freight = int.Parse(form.Get("Freight")),
+                ShipCountry = form.Get("ShipCountry"),
+                ShipCity = form.Get("ShipCity"),
+                ShipRegion = form.Get("ShipRegion"),
+                ShipPostalCode = form.Get("ShipPostalCode"),
+                ShipAddress = form.Get("ShipAddress")
+            });
+
+            ViewBag.EmployeeName = EmployeeNameList;
+
+            ViewBag.CompanyName = CompanyNameList;
+            return View("Index");
         }
 
         //建立假資料
