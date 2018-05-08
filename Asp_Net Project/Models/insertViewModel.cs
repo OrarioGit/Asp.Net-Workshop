@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace Asp_Net_Project.Models
 {
-    public class InserViewModel
+    public class InsertViewModel
     {
         [DisplayName("訂單編號")]
         public int OrderID { get; set; }

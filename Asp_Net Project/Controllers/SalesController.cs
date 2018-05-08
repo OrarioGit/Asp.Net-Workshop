@@ -10,10 +10,10 @@ namespace Asp_Net_Project.Controllers
     public class SalesController : Controller
     {
         static Bogus.Faker faker = new Faker("en");
-        static List<object> OrderList = new List<object>();
-        static List<object> EmployeeList = new List<object>();
-        static List<object> CustomerList = new List<object>();
-        static List<object> ShippersList = new List<object>();
+        static List<Models.InsertViewModel> OrderList = new List<Models.InsertViewModel>();
+        static List<Models.Employees> EmployeeList = new List<Models.Employees>();
+        static List<Models.Customers> CustomerList = new List<Models.Customers>();
+        static List<Models.Shippers> ShippersList = new List<Models.Shippers>();
         static List<SelectListItem> EmployeeNameList = new List<SelectListItem>();
         static List<SelectListItem> CompanyNameList = new List<SelectListItem>();
         static List<SelectListItem> ContactNameList = new List<SelectListItem>();
@@ -47,7 +47,7 @@ namespace Asp_Net_Project.Controllers
         {
             ViewBag.form = form;
 
-            List<object> ResultList = OrderList;
+            List<Models.InsertViewModel> ResultList = OrderList;
 
             for (int i = 1; i < form.Count; i++)
             {
@@ -60,29 +60,29 @@ namespace Asp_Net_Project.Controllers
                     switch (form_item)
                     {
                         case "OrderID":
-                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).OrderID == int.Parse(form[i]));
+                            ResultList = ResultList.FindAll(item => item.OrderID == int.Parse(form[i]));
                             break;
                         case "ContactName":
-                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).ContactName.Contains(form[i]));
+                            ResultList = ResultList.FindAll(item => item.ContactName.Contains(form[i]));
                             break;
                         case "EmployeeName":
                             src_index = int.Parse(form[i]);
-                            src_value = ((Models.Employees)EmployeeList[src_index]).LastName;
-                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).EmployeeName.Contains(src_value));
+                            src_value = (EmployeeList[src_index]).LastName;
+                            ResultList = ResultList.FindAll(item => item.EmployeeName.Contains(src_value));
                             break;
                         case "CompanyName":
                             src_index = int.Parse(form[i]);
-                            src_value = ((Models.Shippers)ShippersList[src_index]).CompanyName;
-                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).CompanyName.Contains(src_value));
+                            src_value = ShippersList[src_index].CompanyName;
+                            ResultList = ResultList.FindAll(item => item.CompanyName.Contains(src_value));
                             break;
                         case "OrderDate":
-                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).OrderDate.ToString("yyyy-MM-dd") == form[i]);
+                            ResultList = ResultList.FindAll(item => item.OrderDate.ToString("yyyy-MM-dd") == form[i]);
                             break;
                         case "ShippedDate":
-                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).ShippedDate.ToString("yyyy-MM-dd") == form[i]);
+                            ResultList = ResultList.FindAll(item => item.ShippedDate.ToString("yyyy-MM-dd") == form[i]);
                             break;
                         case "RequiredDate":
-                            ResultList = ResultList.FindAll(item => ((Models.InserViewModel)item).RequiredDate.ToString("yyyy-MM-dd") == form[i]);
+                            ResultList = ResultList.FindAll(item => item.RequiredDate.ToString("yyyy-MM-dd") == form[i]);
                             break;
                     }
                 }
@@ -92,6 +92,7 @@ namespace Asp_Net_Project.Controllers
 
             return View();
         }
+
 
         //GET: 修改頁面
         [HttpGet()]
@@ -104,7 +105,7 @@ namespace Asp_Net_Project.Controllers
                 SetEmployeeNameList();
                 SetCompanyNameList();
             }
-            int list_index = OrderList.IndexOf(OrderList.Find(item => ((Models.InserViewModel)item).OrderID == id)); 
+            int list_index = OrderList.IndexOf(OrderList.Find(item => ((Models.InsertViewModel)item).OrderID == id)); 
 
             //int CN_List_ID = -1;//ContactNameList_id
             //int EN_List_ID = -1;//EmployeeNameList_id
@@ -114,7 +115,7 @@ namespace Asp_Net_Project.Controllers
             //{
             //    if (CN_List_ID == -1)
             //    {
-            //        if (ContactNameList[i].Text == ((Models.InserViewModel)OrderList[id]).ContactName)
+            //        if (ContactNameList[i].Text == ((Models.InsertViewModel)OrderList[id]).ContactName)
             //        {
             //            CN_List_ID = i;
             //        }
@@ -122,7 +123,7 @@ namespace Asp_Net_Project.Controllers
 
             //    if(EN_List_ID == -1)
             //    {
-            //        if (EmployeeNameList[i].Text == ((Models.InserViewModel)OrderList[id]).EmployeeName)
+            //        if (EmployeeNameList[i].Text == ((Models.InsertViewModel)OrderList[id]).EmployeeName)
             //        {
             //            EN_List_ID = i;
             //        }
@@ -130,7 +131,7 @@ namespace Asp_Net_Project.Controllers
 
             //    if (CpN_List_ID == -1)
             //    {
-            //        if (CompanyNameList[i].Text == ((Models.InserViewModel)OrderList[id]).CompanyName)
+            //        if (CompanyNameList[i].Text == ((Models.InsertViewModel)OrderList[id]).CompanyName)
             //        {
             //            CpN_List_ID = i;
             //        }
@@ -167,17 +168,17 @@ namespace Asp_Net_Project.Controllers
             int form_EmployeeName = int.Parse(form.Get("EmployeeName"));
             int form_CompanyName = int.Parse(form.Get("CompanyName"));
 
-            int Update_Index = OrderList.IndexOf(OrderList.Find(item => ((Models.InserViewModel)item).OrderID == Form_OrderID));
+            int Update_Index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == Form_OrderID));
 
-            OrderList[Update_Index] = new Models.InserViewModel
+            OrderList[Update_Index] = new Models.InsertViewModel
             {
                 OrderID = Form_OrderID,
-                ContactName = ((Models.Customers)CustomerList[form_ContactName]).ContactName,
-                EmployeeName = ((Models.Employees)EmployeeList[form_EmployeeName]).LastName,
+                ContactName = CustomerList[form_ContactName].ContactName,
+                EmployeeName = EmployeeList[form_EmployeeName].LastName,
                 OrderDate = Convert.ToDateTime(form.Get("OrderDate")),
                 RequiredDate = Convert.ToDateTime(form.Get("RequiredDate")),
                 ShippedDate = Convert.ToDateTime(form.Get("ShippedDate")),
-                CompanyName = ((Models.Shippers)ShippersList[form_CompanyName]).CompanyName,
+                CompanyName = ShippersList[form_CompanyName].CompanyName,
                 Freight = int.Parse(form.Get("Freight")),
                 ShipCountry = form.Get("ShipCountry"),
                 ShipCity = form.Get("ShipCity"),
@@ -216,27 +217,27 @@ namespace Asp_Net_Project.Controllers
 
         //POST: 新增訂單儲存
         [HttpPost()]
-        public ActionResult InsertOrders(FormCollection form)
+        public ActionResult InsertOrders(/*FormCollection form*/Models.InsertViewModel InsertData)
         {
-            int form_ContactName = int.Parse(form.Get("ContactName"));
-            int form_EmployeeName = int.Parse(form.Get("EmployeeName"));
-            int form_CompanyName = int.Parse(form.Get("CompanyName"));
+            int form_ContactName = int.Parse(InsertData.ContactName);
+            int form_EmployeeName = int.Parse(InsertData.EmployeeName);
+            int form_CompanyName = int.Parse(InsertData.CompanyName);
 
-            OrderList.Add(new Models.InserViewModel
+            OrderList.Add(new Models.InsertViewModel
             {
-                OrderID = ((Models.InserViewModel)OrderList[OrderList.Count-1]).OrderID + 1,
-                ContactName = ((Models.Customers)CustomerList[form_ContactName]).ContactName,
-                EmployeeName = ((Models.Employees)EmployeeList[form_EmployeeName]).LastName,
-                OrderDate = Convert.ToDateTime(form.Get("OrderDate")),
-                RequiredDate = Convert.ToDateTime(form.Get("RequiredDate")),
-                ShippedDate = Convert.ToDateTime(form.Get("ShippedDate")),
-                CompanyName = ((Models.Shippers)ShippersList[form_CompanyName]).CompanyName,
-                Freight = int.Parse(form.Get("Freight")),
-                ShipCountry = form.Get("ShipCountry"),
-                ShipCity = form.Get("ShipCity"),
-                ShipRegion = form.Get("ShipRegion"),
-                ShipPostalCode = form.Get("ShipPostalCode"),
-                ShipAddress = form.Get("ShipAddress")
+                OrderID = OrderList[OrderList.Count-1].OrderID + 1,
+                ContactName = CustomerList[form_ContactName].ContactName,
+                EmployeeName = EmployeeList[form_EmployeeName].LastName,
+                OrderDate = Convert.ToDateTime(InsertData.OrderDate),
+                RequiredDate = Convert.ToDateTime(InsertData.RequiredDate),
+                ShippedDate = Convert.ToDateTime(InsertData.ShippedDate),
+                CompanyName = ShippersList[form_CompanyName].CompanyName,
+                Freight = InsertData.Freight,
+                ShipCountry = InsertData.ShipCountry,
+                ShipCity = InsertData.ShipCity,
+                ShipRegion = InsertData.ShipRegion,
+                ShipPostalCode = InsertData.ShipPostalCode,
+                ShipAddress = InsertData.ShipAddress
             });
 
             ViewBag.EmployeeName = EmployeeNameList;
@@ -249,7 +250,7 @@ namespace Asp_Net_Project.Controllers
         [HttpGet]
         public ActionResult DeleteOrders(int id)
         {
-            OrderList.Remove(OrderList.Find(item => ((Models.InserViewModel)item).OrderID == id));
+            OrderList.Remove(OrderList.Find(item => ((Models.InsertViewModel)item).OrderID == id));
 
             ViewBag.EmployeeName = EmployeeNameList;
 
@@ -298,15 +299,15 @@ namespace Asp_Net_Project.Controllers
             for (int x = 0; x < 10; x++)
             {
                 var rngDate = faker.Date.Between(Convert.ToDateTime("2017/01/01"), Convert.ToDateTime("2017/12/31"));
-                OrderList.Add(new Models.InserViewModel
+                OrderList.Add(new Models.InsertViewModel
                 {
                     OrderID = x,
-                    ContactName = ((Models.Customers)CustomerList[x%5]).ContactName,
-                    EmployeeName = ((Models.Employees)EmployeeList[x%5]).LastName,
+                    ContactName = CustomerList[x%5].ContactName,
+                    EmployeeName = EmployeeList[x%5].LastName,
                     OrderDate = rngDate,
                     RequiredDate = rngDate,
                     ShippedDate = rngDate.AddDays(5),
-                    CompanyName = ((Models.Shippers)ShippersList[x%5]).CompanyName,
+                    CompanyName = ShippersList[x%5].CompanyName,
                     Freight = Decimal.Parse(faker.Commerce.Price(1000, 2000, 0, "")),
                     ShipCountry = faker.Address.Country(),
                     ShipCity = faker.Address.City(),
@@ -324,7 +325,7 @@ namespace Asp_Net_Project.Controllers
             {
                 EmployeeNameList.Add(new SelectListItem()
                 {
-                    Text = ((Models.Employees)EmployeeList[i]).LastName,
+                    Text = EmployeeList[i].LastName,
                     Value = i.ToString(),
                     Selected = false
                 });
@@ -338,7 +339,7 @@ namespace Asp_Net_Project.Controllers
             {
                 CompanyNameList.Add(new SelectListItem()
                 {
-                    Text = ((Models.Shippers)ShippersList[j]).CompanyName,
+                    Text = ShippersList[j].CompanyName,
                     Value = j.ToString(),
                     Selected = false
                 });
@@ -352,7 +353,7 @@ namespace Asp_Net_Project.Controllers
             {
                 ContactNameList.Add(new SelectListItem()
                 {
-                    Text = ((Models.Customers)CustomerList[j]).ContactName,
+                    Text = CustomerList[j].ContactName,
                     Value = j.ToString(),
                     Selected = false
                 });

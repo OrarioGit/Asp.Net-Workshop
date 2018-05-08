@@ -121,7 +121,7 @@
     </Compile>
     <Compile Include="Models\Customers.cs" />
     <Compile Include="Models\Employees.cs" />
-    <Compile Include="Models\inserViewModel.cs" />
+    <Compile Include="Models\insertViewModel.cs" />
     <Compile Include="Models\Orders.cs" />
     <Compile Include="Models\QueryViewModel.cs" />
     <Compile Include="Models\Shippers.cs" />
