@@ -12,19 +12,19 @@ namespace Asp_Net_Project.Models
         [DisplayName("訂單編號")]
         public int OrderID { get; set; }
 
-        [DisplayName("客戶名稱")]
+        [DisplayName("*客戶名稱")]
         [Required()]
         public string ContactName { get; set; }
 
-        [DisplayName("負責員工名稱")]
+        [DisplayName("*負責員工名稱")]
         [Required()]
         public string EmployeeName { get; set; }
 
-        [DisplayName("訂單日期")]
+        [DisplayName("*訂單日期")]
         [Required()]
         public DateTime OrderDate { get; set; }
 
-        [DisplayName("需要日期")]
+        [DisplayName("*需要日期")]
         [Required()]
         public DateTime RequiredDate { get; set; }
 

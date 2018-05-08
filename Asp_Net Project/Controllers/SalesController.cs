@@ -29,16 +29,12 @@ namespace Asp_Net_Project.Controllers
                 SetEmployeeNameList();
                 SetContactNameList();
             }
-
-
-            Models.QueryViewModel QueryModel = new Models.QueryViewModel();
-
-
+            
             ViewBag.EmployeeName = EmployeeNameList;
 
             ViewBag.CompanyName = CompanyNameList;
 
-            return View(QueryModel);
+            return View();
         }
 
         //POST: 查詢結果
@@ -93,7 +89,6 @@ namespace Asp_Net_Project.Controllers
             return View();
         }
 
-
         //GET: 修改頁面
         [HttpGet()]
         public ActionResult EditOrders(int id)
@@ -105,7 +100,7 @@ namespace Asp_Net_Project.Controllers
                 SetEmployeeNameList();
                 SetCompanyNameList();
             }
-            int list_index = OrderList.IndexOf(OrderList.Find(item => ((Models.InsertViewModel)item).OrderID == id)); 
+            int list_index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == id)); 
 
             //int CN_List_ID = -1;//ContactNameList_id
             //int EN_List_ID = -1;//EmployeeNameList_id
@@ -161,12 +156,12 @@ namespace Asp_Net_Project.Controllers
 
         //POST:修改訂單儲存
         [HttpPost()]
-        public ActionResult EditOrders(FormCollection form)
+        public ActionResult EditOrders(Models.InsertViewModel UpdateData)
         {
-            int Form_OrderID = int.Parse(form.Get("OrderID"));
-            int form_ContactName = int.Parse(form.Get("ContactName"));
-            int form_EmployeeName = int.Parse(form.Get("EmployeeName"));
-            int form_CompanyName = int.Parse(form.Get("CompanyName"));
+            int Form_OrderID = UpdateData.OrderID;
+            int form_ContactName = int.Parse(UpdateData.ContactName);
+            int form_EmployeeName = int.Parse(UpdateData.EmployeeName);
+            int form_CompanyName = int.Parse(UpdateData.CompanyName);
 
             int Update_Index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == Form_OrderID));
 
@@ -175,22 +170,22 @@ namespace Asp_Net_Project.Controllers
                 OrderID = Form_OrderID,
                 ContactName = CustomerList[form_ContactName].ContactName,
                 EmployeeName = EmployeeList[form_EmployeeName].LastName,
-                OrderDate = Convert.ToDateTime(form.Get("OrderDate")),
-                RequiredDate = Convert.ToDateTime(form.Get("RequiredDate")),
-                ShippedDate = Convert.ToDateTime(form.Get("ShippedDate")),
+                OrderDate = Convert.ToDateTime(UpdateData.OrderDate),
+                RequiredDate = Convert.ToDateTime(UpdateData.RequiredDate),
+                ShippedDate = Convert.ToDateTime(UpdateData.ShippedDate),
                 CompanyName = ShippersList[form_CompanyName].CompanyName,
-                Freight = int.Parse(form.Get("Freight")),
-                ShipCountry = form.Get("ShipCountry"),
-                ShipCity = form.Get("ShipCity"),
-                ShipRegion = form.Get("ShipRegion"),
-                ShipPostalCode = form.Get("ShipPostalCode"),
-                ShipAddress = form.Get("ShipAddress")
+                Freight = UpdateData.Freight,
+                ShipCountry = UpdateData.ShipCountry,
+                ShipCity = UpdateData.ShipCity,
+                ShipRegion = UpdateData.ShipRegion,
+                ShipPostalCode = UpdateData.ShipPostalCode,
+                ShipAddress = UpdateData.ShipAddress
             };
 
             ViewBag.EmployeeName = EmployeeNameList;
 
             ViewBag.CompanyName = CompanyNameList;
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         //新增訂單頁面
@@ -217,7 +212,7 @@ namespace Asp_Net_Project.Controllers
 
         //POST: 新增訂單儲存
         [HttpPost()]
-        public ActionResult InsertOrders(/*FormCollection form*/Models.InsertViewModel InsertData)
+        public ActionResult InsertOrders(Models.InsertViewModel InsertData)
         {
             int form_ContactName = int.Parse(InsertData.ContactName);
             int form_EmployeeName = int.Parse(InsertData.EmployeeName);
@@ -243,14 +238,15 @@ namespace Asp_Net_Project.Controllers
             ViewBag.EmployeeName = EmployeeNameList;
 
             ViewBag.CompanyName = CompanyNameList;
-            return View("Index");
+            //return View("Index");
+            return RedirectToAction("Index");
         }
 
         //GET: 刪除訂單動作
         [HttpGet]
         public ActionResult DeleteOrders(int id)
         {
-            OrderList.Remove(OrderList.Find(item => ((Models.InsertViewModel)item).OrderID == id));
+            OrderList.Remove(OrderList.Find(item => item.OrderID == id));
 
             ViewBag.EmployeeName = EmployeeNameList;
 
