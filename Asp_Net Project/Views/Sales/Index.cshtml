@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>訂單查詢頁面</h2>
+<h2>訂單查詢頁面 @ViewBag.result.Rows[0]["EmployeeID"]</h2>
 
 
 @using (Html.BeginForm("QueryResult","Sales")) 

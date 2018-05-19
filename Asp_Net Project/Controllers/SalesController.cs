@@ -1,6 +1,8 @@
 ﻿using Bogus;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -11,28 +13,26 @@ namespace Asp_Net_Project.Controllers
     {
         static Bogus.Faker faker = new Faker("en");
         static List<Models.InsertViewModel> OrderList = new List<Models.InsertViewModel>();
-        static List<Models.Employees> EmployeeList = new List<Models.Employees>();
-        static List<Models.Customers> CustomerList = new List<Models.Customers>();
-        static List<Models.Shippers> ShippersList = new List<Models.Shippers>();
-        static List<SelectListItem> EmployeeNameList = new List<SelectListItem>();
-        static List<SelectListItem> CompanyNameList = new List<SelectListItem>();
-        static List<SelectListItem> ContactNameList = new List<SelectListItem>();
+        static List<SelectListItem> EmployeeList = new List<SelectListItem>();
+        static List<SelectListItem> ShippersList = new List<SelectListItem>();
+        static List<SelectListItem> CustomerList = new List<SelectListItem>();
 
         // GET: 查詢頁面
         [HttpGet()]
         public ActionResult Index()
         {
+            DataTable result = this.TestSql();
+            ViewBag.result = result;
             if (OrderList.Count == 0)
             {
-                DataSetUp();
-                SetCompanyNameList();
-                SetEmployeeNameList();
-                SetContactNameList();
+                SetShippersList();
+                SetEmployeeList();
+                SetCustomerList();
             }
             
-            ViewBag.EmployeeName = EmployeeNameList;
+            ViewBag.EmployeeName = EmployeeList;
 
-            ViewBag.CompanyName = CompanyNameList;
+            ViewBag.CompanyName = ShippersList;
 
             return View();
         }
@@ -61,16 +61,16 @@ namespace Asp_Net_Project.Controllers
                         case "ContactName":
                             ResultList = ResultList.FindAll(item => item.ContactName.Contains(form[i]));
                             break;
-                        case "EmployeeName":
-                            src_index = int.Parse(form[i]);
-                            src_value = (EmployeeList[src_index]).LastName;
-                            ResultList = ResultList.FindAll(item => item.EmployeeName.Contains(src_value));
-                            break;
-                        case "CompanyName":
-                            src_index = int.Parse(form[i]);
-                            src_value = ShippersList[src_index].CompanyName;
-                            ResultList = ResultList.FindAll(item => item.CompanyName.Contains(src_value));
-                            break;
+                        //case "EmployeeName":
+                        //    src_index = int.Parse(form[i]);
+                        //    src_value = (EmployeeList[src_index]).LastName;
+                        //    ResultList = ResultList.FindAll(item => item.EmployeeName.Contains(src_value));
+                        //    break;
+                        //case "CompanyName":
+                        //    src_index = int.Parse(form[i]);
+                        //    src_value = ShippersList[src_index].CompanyName;
+                        //    ResultList = ResultList.FindAll(item => item.CompanyName.Contains(src_value));
+                        //    break;
                         case "OrderDate":
                             ResultList = ResultList.FindAll(item => item.OrderDate.ToString("yyyy-MM-dd") == form[i]);
                             break;
@@ -95,22 +95,21 @@ namespace Asp_Net_Project.Controllers
         {
             if (OrderList.Count == 0)
             {
-                DataSetUp();
-                SetCompanyNameList();
-                SetEmployeeNameList();
-                SetCompanyNameList();
+                SetShippersList();
+                SetEmployeeList();
+                SetShippersList();
             }
             int list_index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == id)); 
 
-            //int CN_List_ID = -1;//ContactNameList_id
-            //int EN_List_ID = -1;//EmployeeNameList_id
-            //int CpN_List_ID = -1;//CompanyNameList_id
+            //int CN_List_ID = -1;//CustomerList_id
+            //int EN_List_ID = -1;//EmployeeList_id
+            //int CpN_List_ID = -1;//ShippersList_id
 
             //for (int i = 0; i < 5; i++)
             //{
             //    if (CN_List_ID == -1)
             //    {
-            //        if (ContactNameList[i].Text == ((Models.InsertViewModel)OrderList[id]).ContactName)
+            //        if (CustomerList[i].Text == ((Models.InsertViewModel)OrderList[id]).ContactName)
             //        {
             //            CN_List_ID = i;
             //        }
@@ -118,7 +117,7 @@ namespace Asp_Net_Project.Controllers
 
             //    if(EN_List_ID == -1)
             //    {
-            //        if (EmployeeNameList[i].Text == ((Models.InsertViewModel)OrderList[id]).EmployeeName)
+            //        if (EmployeeList[i].Text == ((Models.InsertViewModel)OrderList[id]).EmployeeName)
             //        {
             //            EN_List_ID = i;
             //        }
@@ -126,7 +125,7 @@ namespace Asp_Net_Project.Controllers
 
             //    if (CpN_List_ID == -1)
             //    {
-            //        if (CompanyNameList[i].Text == ((Models.InsertViewModel)OrderList[id]).CompanyName)
+            //        if (ShippersList[i].Text == ((Models.InsertViewModel)OrderList[id]).CompanyName)
             //        {
             //            CpN_List_ID = i;
             //        }
@@ -135,20 +134,20 @@ namespace Asp_Net_Project.Controllers
 
 
             //設定下拉式選單預設值
-            var Edit_ContactNameList = ContactNameList;
-            //Edit_ContactNameList[CN_List_ID].Selected = true;
+            var Edit_CustomerList = CustomerList;
+            //Edit_CustomerList[CN_List_ID].Selected = true;
 
-            var Edit_EmployeeNameList = EmployeeNameList;
-            //Edit_EmployeeNameList[EN_List_ID].Selected = true;
+            var Edit_EmployeeList = EmployeeList;
+            //Edit_EmployeeList[EN_List_ID].Selected = true;
 
-            var Edit_CompanyNameList = CompanyNameList;
-            //Edit_CompanyNameList[CpN_List_ID].Selected = true;
+            var Edit_ShippersList = ShippersList;
+            //Edit_ShippersList[CpN_List_ID].Selected = true;
 
-            ViewBag.ContactName = Edit_ContactNameList;
+            ViewBag.ContactName = Edit_CustomerList;
 
-            ViewBag.EmployeeName = Edit_EmployeeNameList;
+            ViewBag.EmployeeName = Edit_EmployeeList;
 
-            ViewBag.CompanyName = Edit_CompanyNameList;
+            ViewBag.CompanyName = Edit_ShippersList;
 
             ViewBag.List = OrderList[list_index];
             return View();
@@ -165,26 +164,26 @@ namespace Asp_Net_Project.Controllers
 
             int Update_Index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == Form_OrderID));
 
-            OrderList[Update_Index] = new Models.InsertViewModel
-            {
-                OrderID = Form_OrderID,
-                ContactName = CustomerList[form_ContactName].ContactName,
-                EmployeeName = EmployeeList[form_EmployeeName].LastName,
-                OrderDate = Convert.ToDateTime(UpdateData.OrderDate),
-                RequiredDate = Convert.ToDateTime(UpdateData.RequiredDate),
-                ShippedDate = Convert.ToDateTime(UpdateData.ShippedDate),
-                CompanyName = ShippersList[form_CompanyName].CompanyName,
-                Freight = UpdateData.Freight,
-                ShipCountry = UpdateData.ShipCountry,
-                ShipCity = UpdateData.ShipCity,
-                ShipRegion = UpdateData.ShipRegion,
-                ShipPostalCode = UpdateData.ShipPostalCode,
-                ShipAddress = UpdateData.ShipAddress
-            };
+            //OrderList[Update_Index] = new Models.InsertViewModel
+            //{
+            //    OrderID = Form_OrderID,
+            //    ContactName = CustomerList[form_ContactName].ContactName,
+            //    EmployeeName = EmployeeList[form_EmployeeName].LastName,
+            //    OrderDate = Convert.ToDateTime(UpdateData.OrderDate),
+            //    RequiredDate = Convert.ToDateTime(UpdateData.RequiredDate),
+            //    ShippedDate = Convert.ToDateTime(UpdateData.ShippedDate),
+            //    CompanyName = ShippersList[form_CompanyName].CompanyName,
+            //    Freight = UpdateData.Freight,
+            //    ShipCountry = UpdateData.ShipCountry,
+            //    ShipCity = UpdateData.ShipCity,
+            //    ShipRegion = UpdateData.ShipRegion,
+            //    ShipPostalCode = UpdateData.ShipPostalCode,
+            //    ShipAddress = UpdateData.ShipAddress
+            //};
 
-            ViewBag.EmployeeName = EmployeeNameList;
+            ViewBag.EmployeeName = EmployeeList;
 
-            ViewBag.CompanyName = CompanyNameList;
+            ViewBag.CompanyName = ShippersList;
             return RedirectToAction("Index");
         }
 
@@ -194,18 +193,17 @@ namespace Asp_Net_Project.Controllers
         {
             if (OrderList.Count == 0)
             {
-                DataSetUp();
-                SetCompanyNameList();
-                SetEmployeeNameList();
-                SetCompanyNameList();
+                SetShippersList();
+                SetEmployeeList();
+                SetShippersList();
             }
 
 
-            ViewBag.ContactName = ContactNameList;
+            ViewBag.ContactName = CustomerList;
 
-            ViewBag.EmployeeName = EmployeeNameList;
+            ViewBag.EmployeeName = EmployeeList;
 
-            ViewBag.CompanyName = CompanyNameList;
+            ViewBag.CompanyName = ShippersList;
 
             return View();
         }
@@ -218,26 +216,26 @@ namespace Asp_Net_Project.Controllers
             int form_EmployeeName = int.Parse(InsertData.EmployeeName);
             int form_CompanyName = int.Parse(InsertData.CompanyName);
 
-            OrderList.Add(new Models.InsertViewModel
-            {
-                OrderID = OrderList[OrderList.Count-1].OrderID + 1,
-                ContactName = CustomerList[form_ContactName].ContactName,
-                EmployeeName = EmployeeList[form_EmployeeName].LastName,
-                OrderDate = Convert.ToDateTime(InsertData.OrderDate),
-                RequiredDate = Convert.ToDateTime(InsertData.RequiredDate),
-                ShippedDate = Convert.ToDateTime(InsertData.ShippedDate),
-                CompanyName = ShippersList[form_CompanyName].CompanyName,
-                Freight = InsertData.Freight,
-                ShipCountry = InsertData.ShipCountry,
-                ShipCity = InsertData.ShipCity,
-                ShipRegion = InsertData.ShipRegion,
-                ShipPostalCode = InsertData.ShipPostalCode,
-                ShipAddress = InsertData.ShipAddress
-            });
+            //OrderList.Add(new Models.InsertViewModel
+            //{
+            //    OrderID = OrderList[OrderList.Count-1].OrderID + 1,
+            //    ContactName = CustomerList[form_ContactName].ContactName,
+            //    EmployeeName = EmployeeList[form_EmployeeName].LastName,
+            //    OrderDate = Convert.ToDateTime(InsertData.OrderDate),
+            //    RequiredDate = Convert.ToDateTime(InsertData.RequiredDate),
+            //    ShippedDate = Convert.ToDateTime(InsertData.ShippedDate),
+            //    CompanyName = ShippersList[form_CompanyName].CompanyName,
+            //    Freight = InsertData.Freight,
+            //    ShipCountry = InsertData.ShipCountry,
+            //    ShipCity = InsertData.ShipCity,
+            //    ShipRegion = InsertData.ShipRegion,
+            //    ShipPostalCode = InsertData.ShipPostalCode,
+            //    ShipAddress = InsertData.ShipAddress
+            //});
 
-            ViewBag.EmployeeName = EmployeeNameList;
+            ViewBag.EmployeeName = EmployeeList;
 
-            ViewBag.CompanyName = CompanyNameList;
+            ViewBag.CompanyName = ShippersList;
             //return View("Index");
             return RedirectToAction("Index");
         }
@@ -248,112 +246,149 @@ namespace Asp_Net_Project.Controllers
         {
             OrderList.Remove(OrderList.Find(item => item.OrderID == id));
 
-            ViewBag.EmployeeName = EmployeeNameList;
+            ViewBag.EmployeeName = EmployeeList;
 
-            ViewBag.CompanyName = CompanyNameList;
+            ViewBag.CompanyName = ShippersList;
 
             return View("Index");
         }
-
-        //建立假資料
-        public void DataSetUp()
-        {
-            //建立客戶資料
-            for (int i = 0; i < 5; i++)
-            {
-                CustomerList.Add(new Models.Customers
-                {
-                    CustomerID = i,
-                    CompanyName = faker.Company.CompanyName(),
-                    ContactName = faker.Name.FullName()
-                });
-            }
-
-            //建立員工資料
-            for (int j = 0; j < 5; j++)
-            {
-                EmployeeList.Add(new Models.Employees
-                {
-                    EmployeeID = j,
-                    FirstName = faker.Name.FirstName(),
-                    LastName = faker.Name.LastName()
-                });
-            }
-
-            //建立運輸公司資料
-            for (int k = 0; k < 5; k++)
-            {
-                ShippersList.Add(new Models.Shippers
-                {
-                    ShipperID = k,
-                    CompanyName = faker.Company.CompanyName(),
-                    Phone = faker.Phone.PhoneNumber()
-                });
-            }
-
-            //建立訂單資料
-            for (int x = 0; x < 10; x++)
-            {
-                var rngDate = faker.Date.Between(Convert.ToDateTime("2017/01/01"), Convert.ToDateTime("2017/12/31"));
-                OrderList.Add(new Models.InsertViewModel
-                {
-                    OrderID = x,
-                    ContactName = CustomerList[x%5].ContactName,
-                    EmployeeName = EmployeeList[x%5].LastName,
-                    OrderDate = rngDate,
-                    RequiredDate = rngDate,
-                    ShippedDate = rngDate.AddDays(5),
-                    CompanyName = ShippersList[x%5].CompanyName,
-                    Freight = Decimal.Parse(faker.Commerce.Price(1000, 2000, 0, "")),
-                    ShipCountry = faker.Address.Country(),
-                    ShipCity = faker.Address.City(),
-                    ShipRegion = faker.Address.State(),
-                    ShipPostalCode = faker.Address.ZipCode(),
-                    ShipAddress = faker.Address.FullAddress()
-                });
-            }
-        }
-
+        
         //建立負責員工下拉式選單data
-        public void SetEmployeeNameList()
+        public void SetEmployeeList()
         {
-            for (int i = 0; i < EmployeeList.Count; i++)
+            DataTable EmployeesInfo = SearchEmployeesInfo();
+            for (int i = 0; i < EmployeesInfo.Rows.Count; i++)
             {
-                EmployeeNameList.Add(new SelectListItem()
+                string EmployeeName = EmployeesInfo.Rows[i]["FirstName"].ToString() + " " + EmployeesInfo.Rows[i]["LastName"].ToString();
+                EmployeeList.Add(new SelectListItem()
                 {
-                    Text = EmployeeList[i].LastName,
-                    Value = i.ToString(),
+                    Text = EmployeeName,
+                    Value = EmployeesInfo.Rows[i]["EmployeeID"].ToString(),
                     Selected = false
                 });
             }
         }
 
         //建立運輸公司名稱下拉式選單data
-        public void SetCompanyNameList()
+        public void SetShippersList()
         {
-            for (int j = 0; j < CustomerList.Count; j++)
+            DataTable ShippersInfo = SearchShippersInfo();
+            for (int j = 0; j < ShippersInfo.Rows.Count; j++)
             {
-                CompanyNameList.Add(new SelectListItem()
+                ShippersList.Add(new SelectListItem()
                 {
-                    Text = ShippersList[j].CompanyName,
-                    Value = j.ToString(),
+                    Text = ShippersInfo.Rows[j]["CompanyName"].ToString(),
+                    Value = ShippersInfo.Rows[j]["ShipperID"].ToString(),
                     Selected = false
                 });
             }
         }
 
         //建立客戶名稱下拉式選單data
-        public void SetContactNameList()
+        public void SetCustomerList()
         {
-            for (int j = 0; j < CustomerList.Count; j++)
+            DataTable CustomersInfo = SearchCustomersInfo();
+            for (int j = 0; j < CustomersInfo.Rows.Count; j++)
             {
-                ContactNameList.Add(new SelectListItem()
+                CustomerList.Add(new SelectListItem()
                 {
-                    Text = CustomerList[j].ContactName,
-                    Value = j.ToString(),
+                    Text = CustomersInfo.Rows[j]["CompanyName"].ToString(),
+                    Value = CustomersInfo.Rows[j]["CustomerID"].ToString(),
                     Selected = false
                 });
             }
+        }
+
+        /// <summary>
+        /// 取得連線字串
+        /// </summary>
+        /// <returns>連線字串</returns>
+        public string GetConnStr()
+        {
+            return System.Configuration.ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
+        }
+
+        /// <summary>
+        /// 查詢客戶資料
+        /// </summary>
+        /// <returns>客戶資料</returns>
+        public DataTable SearchCustomersInfo()
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Select CustomerID, CompanyName, ContactName " +
+                         "From [Sales].[Customers]";
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
+
+            System.Data.DataSet data_result = new System.Data.DataSet();
+
+            dataAdapter.Fill(data_result);
+
+            return data_result.Tables[0];
+        }
+
+        /// <summary>
+        /// 查詢員工資料
+        /// </summary>
+        /// <returns>員工資料</returns>
+        public DataTable SearchEmployeesInfo()
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Select EmployeeID, FirstName, LastName " +
+                         "From [HR].[Employees]";
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
+
+            System.Data.DataSet data_result = new System.Data.DataSet();
+
+            dataAdapter.Fill(data_result);
+
+            return data_result.Tables[0];
+        }
+
+        /// <summary>
+        /// 查詢運輸公司資料
+        /// </summary>
+        /// <returns>運輸公司資料</returns>
+        public DataTable SearchShippersInfo()
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Select ShipperID, CompanyName, Phone " +
+                         "From [Sales].[Shippers]";
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
+
+            System.Data.DataSet data_result = new System.Data.DataSet();
+
+            dataAdapter.Fill(data_result);
+
+            return data_result.Tables[0];
+        }
+
+        public DataTable TestSql()
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Select EmployeeID From [HR].[Employees]";
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
+
+            System.Data.DataSet data_result = new System.Data.DataSet();
+
+            dataAdapter.Fill(data_result);
+            
+            return data_result.Tables[0];
         }
     }
 }

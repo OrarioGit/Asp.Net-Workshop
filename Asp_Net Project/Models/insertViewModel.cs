@@ -34,7 +34,7 @@ namespace Asp_Net_Project.Models
         [DisplayName("出貨公司名稱")]
         public string CompanyName { get; set; }
 
-        [DisplayName("運費")]
+        [DisplayName("*運費")]
         public decimal Freight { get; set; }
 
         [DisplayName("出貨國家")]

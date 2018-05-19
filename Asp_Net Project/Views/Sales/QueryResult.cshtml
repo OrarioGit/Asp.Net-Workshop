@@ -13,17 +13,17 @@
             @Html.DisplayNameFor(model => model.OrderID)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ContactName)
+            負責員工名稱
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.OrderDate)
+            訂單日期
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ShippedDate)
         </th>
         
         <th>
-            @Html.DisplayNameFor(model => model.Freight)
+            運費
         </th>
         <th></th>
     </tr>
@@ -37,10 +37,10 @@
             @item.ContactName
         </td>
         <td>
-            @item.OrderDate.ToString("yyyy-MM-dd")
+            @item.OrderDate.ToString("yyyy/MM/dd")
         </td>
         <td>
-            @item.ShippedDate.ToString("yyyy-MM-dd")
+            @item.ShippedDate.ToString("yyyy/MM/dd")
         </td>
         <td>
             @item.Freight.ToString("N0")
