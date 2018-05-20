@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,16 +22,14 @@ namespace Asp_Net_Project.Controllers
         [HttpGet()]
         public ActionResult Index()
         {
-            DataTable result = this.TestSql();
-            ViewBag.result = result;
-            if (OrderList.Count == 0)
+            if (EmployeeList.Count == 0)
             {
                 SetShippersList();
                 SetEmployeeList();
                 SetCustomerList();
             }
             
-            ViewBag.EmployeeName = EmployeeList;
+            ViewBag.EmployeeList = EmployeeList;
 
             ViewBag.CompanyName = ShippersList;
 
@@ -39,53 +38,26 @@ namespace Asp_Net_Project.Controllers
 
         //POST: 查詢結果
         [HttpPost()]
-        public ActionResult QueryResult(FormCollection form)
+        public ActionResult QueryResult(Models.QueryViewModel QueryData)
         {
-            ViewBag.form = form;
+            DataTable QueryResult = SearchOrdersInfo( QueryData.OrderID
+                                                    , QueryData.ContactName
+                                                    , QueryData.EmployeeName
+                                                    , QueryData.CompanyName
+                                                    , QueryData.OrderDate
+                                                    , QueryData.ShippedDate
+                                                    , QueryData.RequiredDate);
 
-            List<Models.InsertViewModel> ResultList = OrderList;
-
-            for (int i = 1; i < form.Count; i++)
+            //將ShippedDate中的null值替換
+            for (int i = 0; i < QueryResult.Rows.Count; i++)
             {
-                if (form[i] != "")
+                if (QueryResult.Rows[i]["ShippedDate"] == System.DBNull.Value)
                 {
-                    var form_item = form.GetKey(i);
-                    int src_index;
-                    string src_value;
-
-                    switch (form_item)
-                    {
-                        case "OrderID":
-                            ResultList = ResultList.FindAll(item => item.OrderID == int.Parse(form[i]));
-                            break;
-                        case "ContactName":
-                            ResultList = ResultList.FindAll(item => item.ContactName.Contains(form[i]));
-                            break;
-                        //case "EmployeeName":
-                        //    src_index = int.Parse(form[i]);
-                        //    src_value = (EmployeeList[src_index]).LastName;
-                        //    ResultList = ResultList.FindAll(item => item.EmployeeName.Contains(src_value));
-                        //    break;
-                        //case "CompanyName":
-                        //    src_index = int.Parse(form[i]);
-                        //    src_value = ShippersList[src_index].CompanyName;
-                        //    ResultList = ResultList.FindAll(item => item.CompanyName.Contains(src_value));
-                        //    break;
-                        case "OrderDate":
-                            ResultList = ResultList.FindAll(item => item.OrderDate.ToString("yyyy-MM-dd") == form[i]);
-                            break;
-                        case "ShippedDate":
-                            ResultList = ResultList.FindAll(item => item.ShippedDate.ToString("yyyy-MM-dd") == form[i]);
-                            break;
-                        case "RequiredDate":
-                            ResultList = ResultList.FindAll(item => item.RequiredDate.ToString("yyyy-MM-dd") == form[i]);
-                            break;
-                    }
+                    QueryResult.Rows[i]["ShippedDate"] = DateTime.MinValue;
                 }
             }
 
-            ViewBag.List = ResultList;
-
+            ViewBag.QueryResult = QueryResult;
             return View();
         }
 
@@ -93,7 +65,7 @@ namespace Asp_Net_Project.Controllers
         [HttpGet()]
         public ActionResult EditOrders(int id)
         {
-            if (OrderList.Count == 0)
+            if (EmployeeList.Count == 0)
             {
                 SetShippersList();
                 SetEmployeeList();
@@ -191,7 +163,7 @@ namespace Asp_Net_Project.Controllers
         [HttpGet()]
         public ActionResult InsertOrders()
         {
-            if (OrderList.Count == 0)
+            if (EmployeeList.Count == 0)
             {
                 SetShippersList();
                 SetEmployeeList();
@@ -374,6 +346,92 @@ namespace Asp_Net_Project.Controllers
             return data_result.Tables[0];
         }
 
+
+        /// <summary>
+        /// 查詢訂單資料
+        /// </summary>
+        /// <returns>訂單資料</returns>
+        public DataTable SearchOrdersInfo(int OrderID
+                                        , string CustomerName
+                                        , string EmployeeID
+                                        , string ShipperID
+                                        , DateTime OrderDate
+                                        , DateTime ShippedDate
+                                        , DateTime RequiredDate)
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Select Orders.OrderID, Customers.CompanyName, Orders.OrderDate, Orders.ShippedDate " +
+                         "From Sales.Orders " +
+                         "Join Sales.Customers " +
+                         "on Orders.CustomerID = Customers.CustomerID " +
+                         "Where 1 = 1";
+
+            //宣告SQLCommand物件
+            SqlCommand cmd = new SqlCommand(sql, conn);
+
+            //建立串接字串的物件
+            StringBuilder StringBuilder = new StringBuilder();
+            StringBuilder.Append(sql);
+
+            DateTime CompareDate = Convert.ToDateTime("0001/1/1");
+
+            if (OrderID != 0)
+            {
+                StringBuilder.Append(" And Orders.OrderID = @OrderID");
+                cmd.Parameters.Add(new SqlParameter("@OrderID", OrderID));
+            }
+            if (CustomerName != null)
+            {
+                StringBuilder.Append(" And Customers.CompanyName Like @CustomerName");
+                cmd.Parameters.Add(new SqlParameter("@CustomerName", '%' + CustomerName + '%'));
+            }
+            if (EmployeeID != null)
+            {
+                StringBuilder.Append(" And Orders.EmployeeID = @EmployeeID");
+                int List_Index = Convert.ToInt32(EmployeeID) - 1;
+
+                var value = EmployeeList[List_Index].Value;
+                cmd.Parameters.Add(new SqlParameter("@EmployeeID", value));
+            }
+            if (ShipperID != null)
+            {
+                StringBuilder.Append(" And Orders.ShipperID = @ShipperID");
+                int List_Index = Convert.ToInt32(ShipperID) - 1;
+
+                var value = ShippersList[List_Index].Value;
+                cmd.Parameters.Add(new SqlParameter("@ShipperID", value));
+            }
+            if (DateTime.Compare(OrderDate, CompareDate) > 0)
+            {
+                StringBuilder.Append(" And Orders.OrderDate = @OrderDate");
+                cmd.Parameters.Add(new SqlParameter("@OrderDate", OrderDate));
+            }
+            if (DateTime.Compare(ShippedDate, CompareDate) > 0)
+            {
+                StringBuilder.Append(" And Orders.ShippedDate = @ShippedDate");
+                cmd.Parameters.Add(new SqlParameter("@ShippedDate", ShippedDate));
+            }
+            if (DateTime.Compare(RequiredDate, CompareDate) > 0)
+            {
+                StringBuilder.Append(" And Orders.RequiredDate = @RequiredDate");
+                cmd.Parameters.Add(new SqlParameter("@RequiredDate", RequiredDate));
+            }
+            sql = StringBuilder.ToString();
+
+            //因為Sql有改動，所以重新設定一次
+            cmd.CommandText = sql;
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+
+            System.Data.DataSet data_result = new System.Data.DataSet();
+
+            dataAdapter.Fill(data_result);
+
+            return data_result.Tables[0];
+        }
         public DataTable TestSql()
         {
             string connStr = this.GetConnStr();

@@ -29,7 +29,7 @@ namespace Asp_Net_Project.Models
         public DateTime RequiredDate { get; set; }
 
         [DisplayName("出貨日期")]
-        public DateTime ShippedDate { get; set; }
+        public DateTime? ShippedDate { get; set; }
 
         [DisplayName("出貨公司名稱")]
         public string CompanyName { get; set; }

@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>訂單查詢頁面 @ViewBag.result.Rows[0]["EmployeeID"]</h2>
+<h2>訂單查詢頁面</h2>
 
 
 @using (Html.BeginForm("QueryResult","Sales")) 
@@ -33,7 +33,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, "請選擇...", new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.EmployeeName, (IEnumerable<SelectListItem>)ViewBag.EmployeeList, "請選擇...", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
         </div>
     </div>

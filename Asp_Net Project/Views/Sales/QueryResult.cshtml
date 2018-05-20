@@ -22,33 +22,30 @@
             @Html.DisplayNameFor(model => model.ShippedDate)
         </th>
         
-        <th>
-            運費
-        </th>
         <th></th>
     </tr>
 
-@foreach (var item in ViewBag.List) {
+@for(var i = 0; i < ViewBag.QueryResult.Rows.Count; i++) {
     <tr>
         <td>
-            @item.OrderID
+            @ViewBag.QueryResult.Rows[i]["OrderID"]
         </td>
         <td>
-            @item.ContactName
+            @ViewBag.QueryResult.Rows[i]["CompanyName"]
         </td>
         <td>
-            @item.OrderDate.ToString("yyyy/MM/dd")
+            @ViewBag.QueryResult.Rows[i]["OrderDate"].ToString("yyyy/MM/dd")
         </td>
         <td>
-            @item.ShippedDate.ToString("yyyy/MM/dd")
+             @if (DateTime.Compare(ViewBag.QueryResult.Rows[i]["ShippedDate"], DateTime.MinValue) != 0)
+             {
+                 @ViewBag.QueryResult.Rows[i]["ShippedDate"].ToString("yyyy/MM/dd")
+             }
         </td>
-        <td>
-            @item.Freight.ToString("N0")
-        </td>
-        <td>
+        @*<td>
             @Html.ActionLink("Edit", "EditOrders", new { id= item.OrderID }) |
             @Html.ActionLink("Delete", "DeleteOrders", new { id = item.OrderID })
-        </td>
+        </td>*@
     </tr>
 }
 
