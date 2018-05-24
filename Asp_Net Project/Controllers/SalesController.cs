@@ -187,27 +187,10 @@ namespace Asp_Net_Project.Controllers
         {
             InsertOrder(InsertData);
             
-            //OrderList.Add(new Models.InsertViewModel
-            //{
-            //    OrderID = OrderList[OrderList.Count-1].OrderID + 1,
-            //    ContactName = CustomerList[form_ContactName].ContactName,
-            //    EmployeeName = EmployeeList[form_EmployeeName].LastName,
-            //    OrderDate = Convert.ToDateTime(InsertData.OrderDate),
-            //    RequiredDate = Convert.ToDateTime(InsertData.RequiredDate),
-            //    ShippedDate = Convert.ToDateTime(InsertData.ShippedDate),
-            //    CompanyName = ShippersList[form_CompanyName].CompanyName,
-            //    Freight = InsertData.Freight,
-            //    ShipCountry = InsertData.ShipCountry,
-            //    ShipCity = InsertData.ShipCity,
-            //    ShipRegion = InsertData.ShipRegion,
-            //    ShipPostalCode = InsertData.ShipPostalCode,
-            //    ShipAddress = InsertData.ShipAddress
-            //});
-
             ViewBag.EmployeeName = EmployeeList;
 
             ViewBag.CompanyName = ShippersList;
-            //return View("Index");
+
             return RedirectToAction("Index");
         }
 
@@ -437,33 +420,7 @@ namespace Asp_Net_Project.Controllers
 
             return data_result.Tables[0];
         }
-
-        /// <summary>
-        /// 查詢最後一筆訂單ID
-        /// </summary>
-        /// <returns>訂單ID DataTable</returns>
-        //public DataTable SearchLastOrderId()
-        //{
-        //    string connStr = this.GetConnStr();
-
-        //    SqlConnection conn = new SqlConnection(connStr);
-
-        //    string sql = "Select Top 1 Orders.OrderID " +
-        //                 "From Sales.Orders " +
-        //                 "Order By Orders.OrderID Desc";
-
-        //    //宣告SQLCommand物件
-        //    SqlCommand cmd = new SqlCommand(sql, conn);
-
-        //    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
-
-        //    System.Data.DataSet data_result = new System.Data.DataSet();
-
-        //    dataAdapter.Fill(data_result);
-
-        //    return data_result.Tables[0];
-        //}
-
+        
         /// <summary>
         /// 新增訂單資料
         /// </summary>
@@ -473,10 +430,7 @@ namespace Asp_Net_Project.Controllers
             string connStr = this.GetConnStr();
 
             SqlConnection conn = new SqlConnection(connStr);
-
-            //DataTable QueryResult = SearchLastOrderId();
-            //int OrderID = Convert.ToInt32(QueryResult.Rows[0]["OrderID"]) + 1;
-
+            
             string sql = "Insert Into Sales.Orders (CustomerID" +
                                                  ", EmployeeID" +
                                                  ", OrderDate" +
