@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Text;
 using System.Linq;
 using System.Web;
@@ -184,10 +185,8 @@ namespace Asp_Net_Project.Controllers
         [HttpPost()]
         public ActionResult InsertOrders(Models.InsertViewModel InsertData)
         {
-            int form_ContactName = int.Parse(InsertData.ContactName);
-            int form_EmployeeName = int.Parse(InsertData.EmployeeName);
-            int form_CompanyName = int.Parse(InsertData.CompanyName);
-
+            InsertOrder(InsertData);
+            
             //OrderList.Add(new Models.InsertViewModel
             //{
             //    OrderID = OrderList[OrderList.Count-1].OrderID + 1,
@@ -363,11 +362,14 @@ namespace Asp_Net_Project.Controllers
 
             SqlConnection conn = new SqlConnection(connStr);
 
-            string sql = "Select Orders.OrderID, Customers.CompanyName, Orders.OrderDate, Orders.ShippedDate " +
+            string sql = "Select * From " +
+                         "( " +
+                         "Select Orders.OrderID, Customers.CompanyName, Orders.OrderDate, Orders.ShippedDate, ROW_NUMBER() over(Order By Orders.OrderID) as ROWNUM " +
                          "From Sales.Orders " +
                          "Join Sales.Customers " +
                          "on Orders.CustomerID = Customers.CustomerID " +
-                         "Where 1 = 1";
+                         "Where 1 = 1 ";
+            
 
             //宣告SQLCommand物件
             SqlCommand cmd = new SqlCommand(sql, conn);
@@ -419,6 +421,9 @@ namespace Asp_Net_Project.Controllers
                 StringBuilder.Append(" And Orders.RequiredDate = @RequiredDate");
                 cmd.Parameters.Add(new SqlParameter("@RequiredDate", RequiredDate));
             }
+
+            //設定搜尋筆數
+            StringBuilder.Append(" ) as Result_table Where ROWNUM >= 1" /*and ROWNUM <= 10"*/);
             sql = StringBuilder.ToString();
 
             //因為Sql有改動，所以重新設定一次
@@ -432,6 +437,185 @@ namespace Asp_Net_Project.Controllers
 
             return data_result.Tables[0];
         }
+
+        /// <summary>
+        /// 查詢最後一筆訂單ID
+        /// </summary>
+        /// <returns>訂單ID DataTable</returns>
+        //public DataTable SearchLastOrderId()
+        //{
+        //    string connStr = this.GetConnStr();
+
+        //    SqlConnection conn = new SqlConnection(connStr);
+
+        //    string sql = "Select Top 1 Orders.OrderID " +
+        //                 "From Sales.Orders " +
+        //                 "Order By Orders.OrderID Desc";
+
+        //    //宣告SQLCommand物件
+        //    SqlCommand cmd = new SqlCommand(sql, conn);
+
+        //    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+
+        //    System.Data.DataSet data_result = new System.Data.DataSet();
+
+        //    dataAdapter.Fill(data_result);
+
+        //    return data_result.Tables[0];
+        //}
+
+        /// <summary>
+        /// 新增訂單資料
+        /// </summary>
+        /// <returns></returns>
+        public void InsertOrder(Models.InsertViewModel InsertData)
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            //DataTable QueryResult = SearchLastOrderId();
+            //int OrderID = Convert.ToInt32(QueryResult.Rows[0]["OrderID"]) + 1;
+
+            string sql = "Insert Into Sales.Orders (CustomerID" +
+                                                 ", EmployeeID" +
+                                                 ", OrderDate" +
+                                                 ", RequiredDate" +
+                                                 ", ShippedDate" +
+                                                 ", ShipperID" +
+                                                 ", Freight" +
+                                                 ", ShipName" +
+                                                 ", ShipAddress" +
+                                                 ", ShipCity" +
+                                                 ", ShipRegion" +
+                                                 ", ShipPostalCode" +
+                                                 ", ShipCountry) " +
+                                           "Values (@CustomerID" +
+                                                 ", @EmployeeID" +
+                                                 ", @OrderDate" +
+                                                 ", @RequiredDate" +
+                                                 ", @ShippedDate" +
+                                                 ", @ShipperID" +
+                                                 ", @Freight" +
+                                                 ", @ShipName" +
+                                                 ", @ShipAddress" +
+                                                 ", @ShipCity" +
+                                                 ", @ShipRegion" +
+                                                 ", @ShipPostalCode" +
+                                                 ", @ShipCountry) ";
+
+            //宣告SQLCommand物件
+            SqlCommand cmd = new SqlCommand(sql, conn);
+
+            int CustomerList_Index = int.Parse(InsertData.ContactName) -1;
+            int EmployeeList_Index = int.Parse(InsertData.EmployeeName) -1;
+            
+            
+            cmd.Parameters.Add(new SqlParameter("@CustomerID", CustomerList[CustomerList_Index].Value));
+            cmd.Parameters.Add(new SqlParameter("@EmployeeID", EmployeeList[EmployeeList_Index].Value));
+            cmd.Parameters.Add(new SqlParameter("@OrderDate", InsertData.OrderDate));
+            cmd.Parameters.Add(new SqlParameter("@RequiredDate", InsertData.RequiredDate));
+
+            if (InsertData.ShippedDate == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShippedDate", SqlDateTime.MinValue));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShippedDate", InsertData.ShippedDate));
+            }
+
+            if (InsertData.CompanyName == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipperID", ShippersList[0].Value));
+            }
+            else
+            {
+                int ShippersList_Index = int.Parse(InsertData.CompanyName) - 1;
+                cmd.Parameters.Add(new SqlParameter("@ShipperID", ShippersList[ShippersList_Index].Value));
+            }
+
+            if (InsertData.Freight == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@Freight", 0));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@Freight", InsertData.Freight));
+            }
+
+            cmd.Parameters.Add(new SqlParameter("@ShipName", ""));
+
+            if (InsertData.ShipAddress == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipAddress", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipAddress", InsertData.ShipAddress));
+            }
+
+            if (InsertData.ShipCity == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipCity", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipCity", InsertData.ShipCity));
+            }
+
+            if (InsertData.ShipRegion == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipRegion", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipRegion", InsertData.ShipRegion));
+            }
+
+            if (InsertData.ShipPostalCode == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipPostalCode", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipPostalCode", InsertData.ShipPostalCode));
+            }
+
+            if (InsertData.ShipCountry == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipCountry", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipCountry", InsertData.ShipCountry));
+            }
+            
+
+            conn.Open();
+
+            //從conn物件啟用Transaction
+            SqlTransaction tran = conn.BeginTransaction();
+
+            cmd.Transaction = tran;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                tran.Commit();
+            }
+            catch (Exception)
+            {
+                tran.Rollback();
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+
         public DataTable TestSql()
         {
             string connStr = this.GetConnStr();
