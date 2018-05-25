@@ -78,25 +78,24 @@ namespace Asp_Net_Project.Controllers
 
             //int list_index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == id)); 
             
-
+            /*下次撰寫選單設定*/
             //設定下拉式選單預設值
-            var Edit_CustomerList = CustomerList;
+            //var Edit_CustomerList = CustomerList;
             //Edit_CustomerList[CN_List_ID].Selected = true;
 
-            var Edit_EmployeeList = EmployeeList;
+            //var Edit_EmployeeList = EmployeeList;
             //Edit_EmployeeList[EN_List_ID].Selected = true;
 
-            var Edit_ShippersList = ShippersList;
+            //var Edit_ShippersList = ShippersList;
             //Edit_ShippersList[CpN_List_ID].Selected = true;
 
-            ViewBag.ContactName = Edit_CustomerList;
+            ViewBag.ContactName = CustomerList;
 
-            ViewBag.EmployeeName = Edit_EmployeeList;
+            ViewBag.EmployeeName = EmployeeList;
 
-            ViewBag.CompanyName = Edit_ShippersList;
+            ViewBag.CompanyName = ShippersList;
 
             ViewBag.OrderInfo = QueryResult;
-            //ViewBag.List = OrderList[list_index];
             return View();
         }
 
@@ -104,12 +103,13 @@ namespace Asp_Net_Project.Controllers
         [HttpPost()]
         public ActionResult EditOrders(Models.InsertViewModel UpdateData)
         {
-            int Form_OrderID = UpdateData.OrderID;
-            int form_ContactName = int.Parse(UpdateData.ContactName);
-            int form_EmployeeName = int.Parse(UpdateData.EmployeeName);
-            int form_CompanyName = int.Parse(UpdateData.CompanyName);
+            UpdateOrder(UpdateData);
+            //int Form_OrderID = UpdateData.OrderID;
+            //int form_ContactName = int.Parse(UpdateData.ContactName);
+            //int form_EmployeeName = int.Parse(UpdateData.EmployeeName);
+            //int form_CompanyName = int.Parse(UpdateData.CompanyName);
 
-            int Update_Index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == Form_OrderID));
+            //int Update_Index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == Form_OrderID));
 
             //OrderList[Update_Index] = new Models.InsertViewModel
             //{
@@ -507,14 +507,7 @@ namespace Asp_Net_Project.Controllers
                 cmd.Parameters.Add(new SqlParameter("@ShipperID", ShippersList[ShippersList_Index].Value));
             }
 
-            if (InsertData.Freight == null)
-            {
-                cmd.Parameters.Add(new SqlParameter("@Freight", 0));
-            }
-            else
-            {
-                cmd.Parameters.Add(new SqlParameter("@Freight", InsertData.Freight));
-            }
+            cmd.Parameters.Add(new SqlParameter("@Freight", InsertData.Freight));
 
             cmd.Parameters.Add(new SqlParameter("@ShipName", ""));
 
@@ -563,6 +556,139 @@ namespace Asp_Net_Project.Controllers
                 cmd.Parameters.Add(new SqlParameter("@ShipCountry", InsertData.ShipCountry));
             }
             
+
+            conn.Open();
+
+            //從conn物件啟用Transaction
+            SqlTransaction tran = conn.BeginTransaction();
+
+            cmd.Transaction = tran;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                tran.Commit();
+            }
+            catch (Exception)
+            {
+                tran.Rollback();
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+
+        /// <summary>
+        /// 更新訂單資料
+        /// </summary>
+        /// <returns></returns>
+        public void UpdateOrder(Models.InsertViewModel UpdateData)
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Update Sales.Orders " +
+                         "Set CustomerID = @CustomerID" +
+                           ", EmployeeID = @EmployeeID" +
+                           ", OrderDate = @OrderDate" +
+                           ", RequiredDate = @RequiredDate" +
+                           ", ShippedDate = @ShippedDate" +
+                           ", ShipperID = @ShipperID" +
+                           ", Freight = @Freight" +
+                           ", ShipName = @ShipName" +
+                           ", ShipAddress = @ShipAddress" +
+                           ", ShipCity = @ShipCity" +
+                           ", ShipRegion = @ShipRegion" +
+                           ", ShipPostalCode = @ShipPostalCode" +
+                           ", ShipCountry = @ShipCountry " +
+                           "Where OrderID = @OrderID";
+
+            //宣告SQLCommand物件
+            SqlCommand cmd = new SqlCommand(sql, conn);
+
+            int CustomerList_Index = int.Parse(UpdateData.ContactName) - 1;
+            int EmployeeList_Index = int.Parse(UpdateData.EmployeeName) - 1;
+
+
+            cmd.Parameters.Add(new SqlParameter("@CustomerID", CustomerList[CustomerList_Index].Value));
+            cmd.Parameters.Add(new SqlParameter("@EmployeeID", EmployeeList[EmployeeList_Index].Value));
+            cmd.Parameters.Add(new SqlParameter("@OrderDate", UpdateData.OrderDate));
+            cmd.Parameters.Add(new SqlParameter("@RequiredDate", UpdateData.RequiredDate));
+
+            if (UpdateData.ShippedDate == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShippedDate", SqlDateTime.MinValue));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShippedDate", UpdateData.ShippedDate));
+            }
+
+            if (UpdateData.CompanyName == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipperID", ShippersList[0].Value));
+            }
+            else
+            {
+                int ShippersList_Index = int.Parse(UpdateData.CompanyName) - 1;
+                cmd.Parameters.Add(new SqlParameter("@ShipperID", ShippersList[ShippersList_Index].Value));
+            }
+
+            cmd.Parameters.Add(new SqlParameter("@Freight", UpdateData.Freight));
+
+            cmd.Parameters.Add(new SqlParameter("@ShipName", ""));
+
+            if (UpdateData.ShipAddress == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipAddress", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipAddress", UpdateData.ShipAddress));
+            }
+
+            if (UpdateData.ShipCity == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipCity", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipCity", UpdateData.ShipCity));
+            }
+
+            if (UpdateData.ShipRegion == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipRegion", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipRegion", UpdateData.ShipRegion));
+            }
+
+            if (UpdateData.ShipPostalCode == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipPostalCode", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipPostalCode", UpdateData.ShipPostalCode));
+            }
+
+            if (UpdateData.ShipCountry == null)
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipCountry", ""));
+            }
+            else
+            {
+                cmd.Parameters.Add(new SqlParameter("@ShipCountry", UpdateData.ShipCountry));
+            }
+
+            cmd.Parameters.Add(new SqlParameter("@OrderID", UpdateData.OrderID));
+
 
             conn.Open();
 
