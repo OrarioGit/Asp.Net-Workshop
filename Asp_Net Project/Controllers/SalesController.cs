@@ -72,39 +72,12 @@ namespace Asp_Net_Project.Controllers
                 SetEmployeeList();
                 SetShippersList();
             }
-            int list_index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == id)); 
 
-            //int CN_List_ID = -1;//CustomerList_id
-            //int EN_List_ID = -1;//EmployeeList_id
-            //int CpN_List_ID = -1;//ShippersList_id
+            //查詢訂單資料
+            DataTable QueryResult = SearchOrderInfo(id);
 
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    if (CN_List_ID == -1)
-            //    {
-            //        if (CustomerList[i].Text == ((Models.InsertViewModel)OrderList[id]).ContactName)
-            //        {
-            //            CN_List_ID = i;
-            //        }
-            //    }
-
-            //    if(EN_List_ID == -1)
-            //    {
-            //        if (EmployeeList[i].Text == ((Models.InsertViewModel)OrderList[id]).EmployeeName)
-            //        {
-            //            EN_List_ID = i;
-            //        }
-            //    }
-
-            //    if (CpN_List_ID == -1)
-            //    {
-            //        if (ShippersList[i].Text == ((Models.InsertViewModel)OrderList[id]).CompanyName)
-            //        {
-            //            CpN_List_ID = i;
-            //        }
-            //    }
-            //}
-
+            //int list_index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == id)); 
+            
 
             //設定下拉式選單預設值
             var Edit_CustomerList = CustomerList;
@@ -122,7 +95,8 @@ namespace Asp_Net_Project.Controllers
 
             ViewBag.CompanyName = Edit_ShippersList;
 
-            ViewBag.List = OrderList[list_index];
+            ViewBag.OrderInfo = QueryResult;
+            //ViewBag.List = OrderList[list_index];
             return View();
         }
 
@@ -420,7 +394,51 @@ namespace Asp_Net_Project.Controllers
 
             return data_result.Tables[0];
         }
-        
+
+        /// <summary>
+        /// 查詢訂單資料
+        /// </summary>
+        /// <returns>訂單資料</returns>
+        public DataTable SearchOrderInfo(int OrderID)
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Select Orders.OrderID" +
+                              ", Orders.CustomerID" +
+                              ", Orders.EmployeeID" +
+                              ", Orders.OrderDate" +
+                              ", Orders.RequiredDate" +
+                              ", Orders.ShippedDate" +
+                              ", Orders.ShipperID" +
+                              ", Orders.Freight" +
+                              ", Orders.ShipName" +
+                              ", Orders.ShipAddress" +
+                              ", Orders.ShipCity" +
+                              ", Orders.ShipRegion" +
+                              ", Orders.ShipPostalCode" +
+                              ", Orders.ShipCountry " +
+                         "From Sales.Orders " +
+                         "Join Sales.Customers " +
+                         "on Orders.CustomerID = Customers.CustomerID " +
+                         "Where Orders.OrderID = @OrderID";
+
+
+            //宣告SQLCommand物件
+            SqlCommand cmd = new SqlCommand(sql, conn);
+
+            cmd.Parameters.Add(new SqlParameter("@OrderID", OrderID));
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+
+            System.Data.DataSet data_result = new System.Data.DataSet();
+
+            dataAdapter.Fill(data_result);
+
+            return data_result.Tables[0];
+        }
+
         /// <summary>
         /// 新增訂單資料
         /// </summary>

@@ -42,10 +42,10 @@
                  @ViewBag.QueryResult.Rows[i]["ShippedDate"].ToString("yyyy/MM/dd")
              }
         </td>
-        @*<td>
-            @Html.ActionLink("Edit", "EditOrders", new { id= item.OrderID }) |
-            @Html.ActionLink("Delete", "DeleteOrders", new { id = item.OrderID })
-        </td>*@
+        <td>
+            @Html.ActionLink("Edit", "EditOrders", new { id = ViewBag.QueryResult.Rows[i]["OrderID"] }) |
+            @Html.ActionLink("Delete", "DeleteOrders", new { id = ViewBag.QueryResult.Rows[i]["OrderID"] })
+        </td>
     </tr>
 }
 

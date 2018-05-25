@@ -18,7 +18,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = @ViewBag.List.OrderID } })
+            @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = @ViewBag.OrderInfo.Rows[0]["OrderID"] } })
             @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -42,13 +42,13 @@
     <div class="form-group">
         @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-4">
-            @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.List.OrderDate.ToString("yyyy-MM-dd")})
+            @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["OrderDate"].ToString("yyyy-MM-dd") })
             @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
         </div>
 
         @Html.LabelFor(model => model.RequiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-4">
-            @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.List.RequiredDate.ToString("yyyy-MM-dd") })
+            @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["RequiredDate"].ToString("yyyy-MM-dd") })
             @Html.ValidationMessageFor(model => model.RequiredDate, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -56,7 +56,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.List.ShippedDate.ToString("yyyy-MM-dd") })
+            @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShippedDate"].ToString("yyyy-MM-dd") })
             @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -72,7 +72,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Freight, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxFor(model => model.Freight, new { @type = "number", @class = "form-control", @Value = @ViewBag.List.Freight })
+            @Html.TextBoxFor(model => model.Freight, new { @type = "number", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["Freight"]})
             @Html.ValidationMessageFor(model => model.Freight, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -80,13 +80,13 @@
     <div class="form-group">
         @Html.LabelFor(model => model.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-4">
-            @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control", @Value = @ViewBag.List.ShipCountry })
+            @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipCountry"] })
             @Html.ValidationMessageFor(model => model.ShipCountry, "", new { @class = "text-danger" })
         </div>
 
         @Html.LabelFor(model => model.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-4">
-            @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control", @Value = @ViewBag.List.ShipCity })
+            @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipCity"] })
             @Html.ValidationMessageFor(model => model.ShipCity, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -94,13 +94,13 @@
     <div class="form-group">
         @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-4">
-            @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control", @Value = @ViewBag.List.ShipRegion })
+            @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipRegion"] })
             @Html.ValidationMessageFor(model => model.ShipRegion, "", new { @class = "text-danger" })
         </div>
 
         @Html.LabelFor(model => model.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-4">
-            @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control", @Value = @ViewBag.List.ShipPostalCode })
+            @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipPostalCode"] })
             @Html.ValidationMessageFor(model => model.ShipPostalCode, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -108,7 +108,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.ShipAddress, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control", @Value = @ViewBag.List.ShipAddress })
+            @Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipAddress"] })
             @Html.ValidationMessageFor(model => model.ShipAddress, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -123,7 +123,7 @@
 
 <div>
 
-    @Html.ActionLink("刪除本筆訂單", "DeleteOrders", new { id = ViewBag.List.OrderID })|
+    @Html.ActionLink("刪除本筆訂單", "DeleteOrders", new { id = ViewBag.OrderInfo.Rows[0]["OrderID"] })|
     <a href="javascript:void(0);" onclick="history.go(-1);">返回上一頁</a>
 </div>
 
