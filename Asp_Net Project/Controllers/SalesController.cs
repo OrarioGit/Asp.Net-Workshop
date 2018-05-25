@@ -104,30 +104,7 @@ namespace Asp_Net_Project.Controllers
         public ActionResult EditOrders(Models.InsertViewModel UpdateData)
         {
             UpdateOrder(UpdateData);
-            //int Form_OrderID = UpdateData.OrderID;
-            //int form_ContactName = int.Parse(UpdateData.ContactName);
-            //int form_EmployeeName = int.Parse(UpdateData.EmployeeName);
-            //int form_CompanyName = int.Parse(UpdateData.CompanyName);
-
-            //int Update_Index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == Form_OrderID));
-
-            //OrderList[Update_Index] = new Models.InsertViewModel
-            //{
-            //    OrderID = Form_OrderID,
-            //    ContactName = CustomerList[form_ContactName].ContactName,
-            //    EmployeeName = EmployeeList[form_EmployeeName].LastName,
-            //    OrderDate = Convert.ToDateTime(UpdateData.OrderDate),
-            //    RequiredDate = Convert.ToDateTime(UpdateData.RequiredDate),
-            //    ShippedDate = Convert.ToDateTime(UpdateData.ShippedDate),
-            //    CompanyName = ShippersList[form_CompanyName].CompanyName,
-            //    Freight = UpdateData.Freight,
-            //    ShipCountry = UpdateData.ShipCountry,
-            //    ShipCity = UpdateData.ShipCity,
-            //    ShipRegion = UpdateData.ShipRegion,
-            //    ShipPostalCode = UpdateData.ShipPostalCode,
-            //    ShipAddress = UpdateData.ShipAddress
-            //};
-
+            
             ViewBag.EmployeeName = EmployeeList;
 
             ViewBag.CompanyName = ShippersList;
@@ -172,7 +149,7 @@ namespace Asp_Net_Project.Controllers
         [HttpGet]
         public ActionResult DeleteOrders(int id)
         {
-            OrderList.Remove(OrderList.Find(item => item.OrderID == id));
+            DeleteOrder(id);
 
             ViewBag.EmployeeName = EmployeeList;
 
@@ -690,6 +667,48 @@ namespace Asp_Net_Project.Controllers
             cmd.Parameters.Add(new SqlParameter("@OrderID", UpdateData.OrderID));
 
 
+            conn.Open();
+
+            //從conn物件啟用Transaction
+            SqlTransaction tran = conn.BeginTransaction();
+
+            cmd.Transaction = tran;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                tran.Commit();
+            }
+            catch (Exception)
+            {
+                tran.Rollback();
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+
+        /// <summary>
+        /// 刪除訂單資料
+        /// </summary>
+        /// <returns></returns>
+        public void DeleteOrder(int OrderID)
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Delete From Sales.Orders " +
+                         "Where OrderID = @OrderID";
+            
+            //宣告SQLCommand物件
+            SqlCommand cmd = new SqlCommand(sql, conn);
+
+            cmd.Parameters.Add(new SqlParameter("@orderID", OrderID));
+            
             conn.Open();
 
             //從conn物件啟用Transaction
