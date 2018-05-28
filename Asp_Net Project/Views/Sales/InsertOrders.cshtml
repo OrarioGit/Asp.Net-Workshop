@@ -7,10 +7,10 @@
 <h2>新增訂單頁面</h2>
 
 
-@using (Html.BeginForm("InsertOrders", "Sales")) 
+@using (Html.BeginForm("InsertOrders", "Sales"))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         @*<h4>InserViewModel</h4>*@
         <hr />
@@ -18,7 +18,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, "請選擇", new { @class = "form-control"})
+                @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, "請選擇", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -110,13 +110,41 @@
                 <input type="submit" value="存檔" class="btn btn-default" />
             </div>
         </div>
+
+        <a id="addProduct">+新增商品</a>
+        <table class="table" id="productTabel">
+            <tr>
+                <th>商品</th>
+                <th>單價</th>
+                <th>數量</th>
+                <th>小計</th>
+                <th></th>
+            </tr>
+        </table>
     </div>
 }
 
+</br>
 <div>
     @Html.ActionLink("回前一頁", "Index")
 </div>
 
+
+
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $("#addProduct").on("click", function () {
+        var content = `<tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>取消</td>
+                       </tr>`;
+
+        $("#productTabel").append(content);
+    });
+</script>

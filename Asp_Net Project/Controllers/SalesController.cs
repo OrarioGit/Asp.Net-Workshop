@@ -18,6 +18,7 @@ namespace Asp_Net_Project.Controllers
         static List<SelectListItem> EmployeeList = new List<SelectListItem>();
         static List<SelectListItem> ShippersList = new List<SelectListItem>();
         static List<SelectListItem> CustomerList = new List<SelectListItem>();
+        static List<SelectListItem> ProductsList = new List<SelectListItem>();
 
         // GET: 查詢頁面
         [HttpGet()]
@@ -28,6 +29,7 @@ namespace Asp_Net_Project.Controllers
                 SetShippersList();
                 SetEmployeeList();
                 SetCustomerList();
+                SetProductsList();
             }
             
             ViewBag.EmployeeList = EmployeeList;
@@ -71,6 +73,7 @@ namespace Asp_Net_Project.Controllers
                 SetShippersList();
                 SetEmployeeList();
                 SetShippersList();
+                SetProductsList();
             }
 
             //查詢訂單資料
@@ -111,7 +114,7 @@ namespace Asp_Net_Project.Controllers
             return RedirectToAction("Index");
         }
 
-        //新增訂單頁面
+        //GET: 新增訂單頁面
         [HttpGet()]
         public ActionResult InsertOrders()
         {
@@ -120,6 +123,7 @@ namespace Asp_Net_Project.Controllers
                 SetShippersList();
                 SetEmployeeList();
                 SetShippersList();
+                SetProductsList();
             }
 
 
@@ -204,6 +208,21 @@ namespace Asp_Net_Project.Controllers
             }
         }
 
+        //建立產品名稱下拉式選單data
+        public void SetProductsList()
+        {
+            DataTable ProductsInfo = SearchProductsInfo();
+            for (int j = 0; j < ProductsInfo.Rows.Count; j++)
+            {
+                CustomerList.Add(new SelectListItem()
+                {
+                    Text = ProductsInfo.Rows[j]["ProductName"].ToString(),
+                    Value = ProductsInfo.Rows[j]["ProductID"].ToString(),
+                    Selected = false
+                });
+            }
+        }
+
         /// <summary>
         /// 取得連線字串
         /// </summary>
@@ -269,6 +288,28 @@ namespace Asp_Net_Project.Controllers
 
             string sql = "Select ShipperID, CompanyName, Phone " +
                          "From [Sales].[Shippers]";
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
+
+            System.Data.DataSet data_result = new System.Data.DataSet();
+
+            dataAdapter.Fill(data_result);
+
+            return data_result.Tables[0];
+        }
+
+        /// <summary>
+        /// 查詢產品資料
+        /// </summary>
+        /// <returns>運輸產品資料</returns>
+        public DataTable SearchProductsInfo()
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Select ProductID, ProductName " +
+                         "From [Production].[Products]";
 
             SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
 
