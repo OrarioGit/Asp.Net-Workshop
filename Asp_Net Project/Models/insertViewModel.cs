@@ -51,5 +51,8 @@ namespace Asp_Net_Project.Models
 
         [DisplayName("出貨地址")]
         public string ShipAddress { get; set; }
+
+        [DisplayName("產品名稱名稱")]
+        public string ProductName { get; set; }
     }
 }

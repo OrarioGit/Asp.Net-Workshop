@@ -133,6 +133,8 @@ namespace Asp_Net_Project.Controllers
 
             ViewBag.CompanyName = ShippersList;
 
+            ViewBag.ProductName = ProductsList;
+
             return View();
         }
 
@@ -214,7 +216,7 @@ namespace Asp_Net_Project.Controllers
             DataTable ProductsInfo = SearchProductsInfo();
             for (int j = 0; j < ProductsInfo.Rows.Count; j++)
             {
-                CustomerList.Add(new SelectListItem()
+                ProductsList.Add(new SelectListItem()
                 {
                     Text = ProductsInfo.Rows[j]["ProductName"].ToString(),
                     Value = ProductsInfo.Rows[j]["ProductID"].ToString(),
