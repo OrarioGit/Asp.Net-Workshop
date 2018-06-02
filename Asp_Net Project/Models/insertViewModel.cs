@@ -38,21 +38,28 @@ namespace Asp_Net_Project.Models
         public decimal Freight { get; set; }
 
         [DisplayName("出貨國家")]
+        [MaxLength(15, ErrorMessage = "字數長度不可超過{1}")]
         public string ShipCountry { get; set; }
 
         [DisplayName("出貨城市")]
+        [MaxLength(15, ErrorMessage = "字數長度不可超過{1}")]
         public string ShipCity { get; set; }
 
         [DisplayName("出貨地區")]
+        [MaxLength(15, ErrorMessage = "字數長度不可超過{1}")]
         public string ShipRegion { get; set; }
 
         [DisplayName("郵遞區號")]
+        [MaxLength(10, ErrorMessage = "字數長度不可超過{1}")]
         public string ShipPostalCode { get; set; }
 
         [DisplayName("出貨地址")]
+        [MaxLength(60, ErrorMessage = "字數長度不可超過{1}")]
         public string ShipAddress { get; set; }
 
-        [DisplayName("產品名稱名稱")]
-        public string ProductName { get; set; }
+        /// <summary>
+        /// 訂單詳細資料
+        /// </summary>
+        public List<OrderDetail> Details { get; set; }
     }
 }

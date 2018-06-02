@@ -151,6 +151,17 @@ namespace Asp_Net_Project.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// 獲取商品細節下拉式選單
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>商品細節下拉式選單</returns>
+        [HttpGet()]
+        public JsonResult GetProductsDetailList()
+        {
+            return Json(ProductsList, JsonRequestBehavior.AllowGet);
+        }
+
         //GET: 刪除訂單動作
         [HttpGet]
         public ActionResult DeleteOrders(int id)
@@ -494,7 +505,8 @@ namespace Asp_Net_Project.Controllers
                                                  ", @ShipCity" +
                                                  ", @ShipRegion" +
                                                  ", @ShipPostalCode" +
-                                                 ", @ShipCountry) ";
+                                                 ", @ShipCountry);" +
+                                                 "Select @@IDENTITY As OrderID";
 
             //宣告SQLCommand物件
             SqlCommand cmd = new SqlCommand(sql, conn);
@@ -583,11 +595,16 @@ namespace Asp_Net_Project.Controllers
             SqlTransaction tran = conn.BeginTransaction();
 
             cmd.Transaction = tran;
-
+            int new_OrderID;
             try
             {
-                cmd.ExecuteNonQuery();
+                //cmd.ExecuteNonQuery();
+                new_OrderID = Convert.ToInt32(cmd.ExecuteScalar());
+                
+                
                 tran.Commit();
+
+                
             }
             catch (Exception)
             {
@@ -598,6 +615,62 @@ namespace Asp_Net_Project.Controllers
             {
                 conn.Close();
             }
+
+            InsertOrderDetail(InsertData, new_OrderID);
+        }
+
+        /// <summary>
+        /// 新增訂單明細資料
+        /// </summary>
+        /// <returns></returns>
+        public void InsertOrderDetail(Models.InsertViewModel InsertData, int new_OrderID)
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Insert Into Sales.OrderDetails (OrderID" +
+                                                       ", ProductID" +
+                                                       ", UnitPrice)" +
+                                                 "Values (@OrderID" +
+                                                       ", @ProductID" +
+                                                       ", @UnitPrice) ";
+
+            //宣告SQLCommand物件
+            SqlCommand cmd = new SqlCommand(sql, conn);
+
+            for (int i = 0; i < InsertData.Details.Count; i++)
+            {
+                
+                cmd.Parameters.Add(new SqlParameter("@OrderID", new_OrderID));
+                cmd.Parameters.Add(new SqlParameter("@ProductID", InsertData.Details[i].ProductID));
+                cmd.Parameters.Add(new SqlParameter("@UnitPrice", InsertData.Details[i].UnitPrice));
+
+
+                conn.Open();
+
+                //從conn物件啟用Transaction
+                SqlTransaction tran = conn.BeginTransaction();
+
+                cmd.Transaction = tran;
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                    tran.Commit();
+                }
+                catch (Exception)
+                {
+                    tran.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
+            }
+
 
         }
 
@@ -744,9 +817,11 @@ namespace Asp_Net_Project.Controllers
 
             SqlConnection conn = new SqlConnection(connStr);
 
-            string sql = "Delete From Sales.Orders " +
-                         "Where OrderID = @OrderID";
-            
+            string sql = "Delete From Sales.OrderDetails " +
+                         "Where OrderDetails.OrderID = @orderID; " +
+                         "Delete From Sales.Orders " +
+                         "Where Orders.OrderID = @orderID";
+
             //宣告SQLCommand物件
             SqlCommand cmd = new SqlCommand(sql, conn);
 

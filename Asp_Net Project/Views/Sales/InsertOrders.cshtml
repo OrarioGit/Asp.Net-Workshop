@@ -112,14 +112,16 @@
         </div>
 
         <a id="addProduct">+新增商品</a>
-        <table class="table" id="productTabel">
-            <tr>
-                <th>商品</th>
-                <th>單價</th>
-                <th>數量</th>
-                <th>小計</th>
-                <th></th>
-            </tr>
+        <table class="table table-hover text-center" id="productTabel">
+            <thead>
+                <tr>
+                    <th>商品</th>
+                    <th>單價</th>
+                    <th>數量</th>
+                    <th>小計</th>
+                    <th></th>
+                </tr>
+            </thead>
         </table>
     </div>
 }
@@ -136,17 +138,54 @@
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 
 <script>
-    $("#addProduct").on("click", function () {
-        var content = `<tr>
-                            <td>
-                                @Html.DropDownListFor(model => model.ProductName, (List<SelectListItem>)ViewBag.ProductName, "請選擇", new { @class = "form-control" })
-                            </td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>取消</td>
-                       </tr>`;
+    $(document).ready(function () {
+        var detailIndex = 0;
+        $("#addProduct").on("click", function () {
+            $.ajax({
+                type: "GET",
+                url: "/Sales/GetProductsDetailList",
+                dataType: "json",
+                success: function (result) {
+                    var row = "<tr id='row_" + detailIndex + "'>";
+                    // 商品
+                    row += "<td>";
+                    var productDropList = "<select name='Details[" + detailIndex + "].ProductID' id='product_" + detailIndex + "' class='form-control'>";
+                    var list = result;
+                    for (var i = 0; i < list.length; i++) {
+                        productDropList += "<option value='" + list[i].Value + "'>" + list[i].Text + "</option>"
+                    }
+                    productDropList += "</select>";
+                    row += productDropList;
+                    row += "</td>";
+                    // 單價
+                    row += "<td class='col-xs-2'>";
+                    row += "<input type='text' name='Details[" + detailIndex + "].UnitPrice' id='price_" + detailIndex + "' value='0' class='form-control text-right'/>"
+                    row += "</td>";
+                    // 數量
+                    row += "<td class='col-xs-2'>";
+                    row += "<input type='number' name='Details[" + detailIndex + "].Qty'  id='num_" + detailIndex + "' class='form-control text-right' value='0' />"
+                    row += "</td>";
+                    // 小計
+                    row += "<td class='col-xs-2 text-center'>";
+                    row += "<span id='total_" + detailIndex + "'>0</span>"
+                    row += "</td>";
+                    // 按鈕
+                    row += "<td class='col-xs-2'>";
+                    row += "<button type='button'  class='btn'>取消</button>";
+                    row += "</td>";
 
-        $("#productTabel").append(content);
+                    row += "</tr>";
+                    $('#productTabel').append(row);
+                    detailIndex++;
+                }, error: function (err) {
+                }
+            });
+        });
     });
+
 </script>
+<style>
+    #productTabel th {
+       text-align:center;
+    }
+</style>
