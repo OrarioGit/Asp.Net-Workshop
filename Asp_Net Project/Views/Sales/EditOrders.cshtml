@@ -177,7 +177,7 @@
                     row += "</td>";
                     // 單價
                     row += "<td class='col-xs-2'>";
-                    row += "<input type='text' name='Details[" + detailIndex + "].UnitPrice' id='price_" + detailIndex + "' value='@ViewBag.OrderDetailInfo.Rows[x]["UnitPrice"]' class='form-control text-right price' onkeyup='changeTotal(" + detailIndex + ");'/>"
+                    row += "<input type='text' name='Details[" + detailIndex + "].UnitPrice' id='price_" + detailIndex + "' value='@ViewBag.OrderDetailInfo.Rows[x]["UnitPrice"].ToString("#0.00")' class='form-control text-right price' onkeyup='changeTotal(" + detailIndex + ");'/>"
                     row += "</td>";
                     // 數量
                     row += "<td class='col-xs-2'>";
@@ -195,7 +195,7 @@
                     row += "</tr>";
                     $('#productTabel').append(row);
 
-                    changeProduct(detailIndex);
+                    changeTotal(detailIndex);
                     detailIndex++;
                 }
             });
