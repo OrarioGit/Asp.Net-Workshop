@@ -78,6 +78,7 @@ namespace Asp_Net_Project.Controllers
 
             //查詢訂單資料
             DataTable QueryResult = SearchOrderInfo(id);
+            DataTable QueryDetalResult = SearchOrderDetailInfo(id);
 
             //int list_index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == id)); 
             
@@ -99,6 +100,7 @@ namespace Asp_Net_Project.Controllers
             ViewBag.CompanyName = ShippersList;
 
             ViewBag.OrderInfo = QueryResult;
+            ViewBag.OrderDetailInfo = QueryDetalResult;
             return View();
         }
 
@@ -160,6 +162,18 @@ namespace Asp_Net_Project.Controllers
         public JsonResult GetProductsDetailList()
         {
             return Json(ProductsList, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 獲取商品價格
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>商品價格</returns>
+        [HttpGet()]
+        public JsonResult GetProductPrice(int ProductID)
+        {
+            DataTable result = SearchProductPrice(ProductID);
+            return Json(result.Rows[0]["UnitPrice"], JsonRequestBehavior.AllowGet);
         }
 
         //GET: 刪除訂單動作
@@ -314,7 +328,7 @@ namespace Asp_Net_Project.Controllers
         /// <summary>
         /// 查詢產品資料
         /// </summary>
-        /// <returns>運輸產品資料</returns>
+        /// <returns>產品資料</returns>
         public DataTable SearchProductsInfo()
         {
             string connStr = this.GetConnStr();
@@ -325,6 +339,34 @@ namespace Asp_Net_Project.Controllers
                          "From [Production].[Products]";
 
             SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
+
+            System.Data.DataSet data_result = new System.Data.DataSet();
+
+            dataAdapter.Fill(data_result);
+
+            return data_result.Tables[0];
+        }
+
+        /// <summary>
+        /// 查詢產品價格
+        /// </summary>
+        /// <returns>產品價格</returns>
+        public DataTable SearchProductPrice(int ProductID)
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Select UnitPrice " +
+                         "From [Production].[Products] " +
+                         "Where ProductID = @ProductID";
+
+            //宣告SQLCommand物件
+            SqlCommand cmd = new SqlCommand(sql, conn);
+
+            cmd.Parameters.Add(new SqlParameter("@ProductID", ProductID));
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
 
             System.Data.DataSet data_result = new System.Data.DataSet();
 
@@ -454,6 +496,37 @@ namespace Asp_Net_Project.Controllers
                          "Join Sales.Customers " +
                          "on Orders.CustomerID = Customers.CustomerID " +
                          "Where Orders.OrderID = @OrderID";
+
+
+            //宣告SQLCommand物件
+            SqlCommand cmd = new SqlCommand(sql, conn);
+
+            cmd.Parameters.Add(new SqlParameter("@OrderID", OrderID));
+
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+
+            System.Data.DataSet data_result = new System.Data.DataSet();
+
+            dataAdapter.Fill(data_result);
+
+            return data_result.Tables[0];
+        }
+
+        /// <summary>
+        /// 查詢訂單明細資料
+        /// </summary>
+        /// <returns>訂單資料</returns>
+        public DataTable SearchOrderDetailInfo(int OrderID)
+        {
+            string connStr = this.GetConnStr();
+
+            SqlConnection conn = new SqlConnection(connStr);
+
+            string sql = "Select ProductID" +
+                              ", UnitPrice" +
+                              ", Qty " +
+                         "From Sales.OrderDetails " +
+                         "Where OrderID = @OrderID";
 
 
             //宣告SQLCommand物件
@@ -641,7 +714,10 @@ namespace Asp_Net_Project.Controllers
 
             for (int i = 0; i < InsertData.Details.Count; i++)
             {
-                
+                if (InsertData.Details[i].ProductID == 0)
+                {
+                    break;
+                }
                 cmd.Parameters.Add(new SqlParameter("@OrderID", new_OrderID));
                 cmd.Parameters.Add(new SqlParameter("@ProductID", InsertData.Details[i].ProductID));
                 cmd.Parameters.Add(new SqlParameter("@UnitPrice", InsertData.Details[i].UnitPrice));
@@ -850,22 +926,6 @@ namespace Asp_Net_Project.Controllers
             }
 
         }
-
-        public DataTable TestSql()
-        {
-            string connStr = this.GetConnStr();
-
-            SqlConnection conn = new SqlConnection(connStr);
-
-            string sql = "Select EmployeeID From [HR].[Employees]";
-
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
-
-            System.Data.DataSet data_result = new System.Data.DataSet();
-
-            dataAdapter.Fill(data_result);
-            
-            return data_result.Tables[0];
-        }
+        
     }
 }

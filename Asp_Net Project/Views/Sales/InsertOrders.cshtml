@@ -137,7 +137,7 @@
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
         var detailIndex = 0;
         $("#addProduct").on("click", function () {
@@ -149,7 +149,7 @@
                     var row = "<tr id='row_" + detailIndex + "'>";
                     // 商品
                     row += "<td>";
-                    var productDropList = "<select name='Details[" + detailIndex + "].ProductID' id='product_" + detailIndex + "' class='form-control'>";
+                    var productDropList = "<select name='Details[" + detailIndex + "].ProductID' id='product_" + detailIndex + "' class='form-control' onchange='changeProduct(" + detailIndex + ")'>";
                     var list = result;
                     for (var i = 0; i < list.length; i++) {
                         productDropList += "<option value='" + list[i].Value + "'>" + list[i].Text + "</option>"
@@ -159,11 +159,11 @@
                     row += "</td>";
                     // 單價
                     row += "<td class='col-xs-2'>";
-                    row += "<input type='text' name='Details[" + detailIndex + "].UnitPrice' id='price_" + detailIndex + "' value='0' class='form-control text-right'/>"
+                    row += "<input type='text' name='Details[" + detailIndex + "].UnitPrice' id='price_" + detailIndex + "' value='0' class='form-control text-right price' onkeyup='changeTotal(" + detailIndex + ");'/>"
                     row += "</td>";
                     // 數量
                     row += "<td class='col-xs-2'>";
-                    row += "<input type='number' name='Details[" + detailIndex + "].Qty'  id='num_" + detailIndex + "' class='form-control text-right' value='0' />"
+                    row += "<input type='number' name='Details[" + detailIndex + "].Qty'  id='num_" + detailIndex + "' class='form-control text-right' value='0' onchange='changeTotal(" + detailIndex + ");'/>"
                     row += "</td>";
                     // 小計
                     row += "<td class='col-xs-2 text-center'>";
@@ -171,18 +171,63 @@
                     row += "</td>";
                     // 按鈕
                     row += "<td class='col-xs-2'>";
-                    row += "<button type='button'  class='btn'>取消</button>";
+                    row += "<button type='button'  class='btn' onclick='removeRow(" + detailIndex + ")'>取消</button>";
                     row += "</td>";
 
                     row += "</tr>";
                     $('#productTabel').append(row);
+
+                    changeProduct(detailIndex);
                     detailIndex++;
-                }, error: function (err) {
+                },
+                error: function (err) {
+                    console.log(err);
                 }
             });
         });
+
+        
     });
 
+    function changeProduct(index) {
+        var val = $("#product_" + index).val();
+
+        $.ajax({
+            type: "GET",
+            url: "/Sales/GetProductPrice?ProductID=" + val,
+            dataType: "json",
+            success: function (result) {
+                $("#price_" + index).val(result);
+
+                changeTotal(index);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
+    function changeTotal(index) {
+        var new_price = $("#price_" + index).val();
+        var new_num = $("#num_" + index).val();
+
+        if ($("#price_" + index).val() == "") {
+            $("#price_" + index).val(0);
+            new_price = 0;
+        }
+
+        if ($("#num_" + index).val() == "") {
+            $("#num_" + index).val(0);
+            new_num = 0;
+        }
+
+        $("#total_" + index).text(new_price * new_num);
+    }
+
+    function removeRow(index) {
+        $("#row_" + index).hide();
+        $("#product_" + index).val(0);
+    }
 </script>
 <style>
     #productTabel th {

@@ -10,115 +10,128 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>InserViewModel</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = @ViewBag.OrderInfo.Rows[0]["OrderID"] } })
-            @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
+
+    <div class="form-horizontal">
+        <h4>InserViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = @ViewBag.OrderInfo.Rows[0]["OrderID"] } })
+                @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
+            </div>
         </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["OrderDate"].ToString("yyyy-MM-dd") })
+                @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.RequiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["RequiredDate"].ToString("yyyy-MM-dd") })
+                @Html.ValidationMessageFor(model => model.RequiredDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShippedDate"].ToString("yyyy-MM-dd") })
+                @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Freight, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Freight, new { @type = "number", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["Freight"] })
+                @Html.ValidationMessageFor(model => model.Freight, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipCountry"] })
+                @Html.ValidationMessageFor(model => model.ShipCountry, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipCity"] })
+                @Html.ValidationMessageFor(model => model.ShipCity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipRegion"] })
+                @Html.ValidationMessageFor(model => model.ShipRegion, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipPostalCode"] })
+                @Html.ValidationMessageFor(model => model.ShipPostalCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShipAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipAddress"] })
+                @Html.ValidationMessageFor(model => model.ShipAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+
+        <a id="addProduct">+新增商品</a>
+        <table class="table table-hover text-center" id="productTabel">
+            <thead>
+                <tr>
+                    <th>商品</th>
+                    <th>單價</th>
+                    <th>數量</th>
+                    <th>小計</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-4">
-            @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["OrderDate"].ToString("yyyy-MM-dd") })
-            @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
-        </div>
-
-        @Html.LabelFor(model => model.RequiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-4">
-            @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["RequiredDate"].ToString("yyyy-MM-dd") })
-            @Html.ValidationMessageFor(model => model.RequiredDate, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShippedDate"].ToString("yyyy-MM-dd") })
-            @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Freight, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.Freight, new { @type = "number", @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["Freight"]})
-            @Html.ValidationMessageFor(model => model.Freight, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-4">
-            @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipCountry"] })
-            @Html.ValidationMessageFor(model => model.ShipCountry, "", new { @class = "text-danger" })
-        </div>
-
-        @Html.LabelFor(model => model.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-4">
-            @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipCity"] })
-            @Html.ValidationMessageFor(model => model.ShipCity, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-4">
-            @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipRegion"] })
-            @Html.ValidationMessageFor(model => model.ShipRegion, "", new { @class = "text-danger" })
-        </div>
-
-        @Html.LabelFor(model => model.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-4">
-            @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipPostalCode"] })
-            @Html.ValidationMessageFor(model => model.ShipPostalCode, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ShipAddress, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control", @Value = @ViewBag.OrderInfo.Rows[0]["ShipAddress"] })
-            @Html.ValidationMessageFor(model => model.ShipAddress, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
 
 <div>
@@ -130,3 +143,156 @@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+    var detailIndex = 0;
+    $(document).ready(function () {
+        
+        @for (int x = 0; x < ViewBag.OrderDetailInfo.Rows.Count; x++){
+            <text>
+            $.ajax({
+                type: "GET",
+                url: "/Sales/GetProductsDetailList",
+                dataType: "json",
+                success: function(result){
+                    var row = "<tr id='row_" + detailIndex + "'>";
+                    // 商品
+                    row += "<td>";
+                    var productDropList = "<select name='Details[" + detailIndex + "].ProductID' id='product_" + detailIndex + "' class='form-control' onchange='changeProduct(" + detailIndex + ")'>";
+                    var list = result;
+                    for (var i = 0; i < list.length; i++) {
+                        
+                        if (list[i].Value == @ViewBag.OrderDetailInfo.Rows[x]["ProductID"])
+                        {
+                            productDropList += "<option value='" + list[i].Value + "' selected='selected'>" + list[i].Text + "</option>"
+                        }
+                        else
+                        {
+                            productDropList += "<option value='" + list[i].Value + "'>" + list[i].Text + "</option>"
+                        }
+                            
+                    }
+                    productDropList += "</select>";
+                    row += productDropList;
+                    row += "</td>";
+                    // 單價
+                    row += "<td class='col-xs-2'>";
+                    row += "<input type='text' name='Details[" + detailIndex + "].UnitPrice' id='price_" + detailIndex + "' value='@ViewBag.OrderDetailInfo.Rows[x]["UnitPrice"]' class='form-control text-right price' onkeyup='changeTotal(" + detailIndex + ");'/>"
+                    row += "</td>";
+                    // 數量
+                    row += "<td class='col-xs-2'>";
+                    row += "<input type='number' name='Details[" + detailIndex + "].Qty'  id='num_" + detailIndex + "' class='form-control text-right' value='@ViewBag.OrderDetailInfo.Rows[x]["Qty"]' onchange='changeTotal(" + detailIndex + ");'/>"
+                    row += "</td>";
+                    // 小計
+                    row += "<td class='col-xs-2 text-center'>";
+                    row += "<span id='total_" + detailIndex + "'>0</span>"
+                    row += "</td>";
+                    // 按鈕
+                    row += "<td class='col-xs-2'>";
+                    row += "<button type='button'  class='btn' onclick='removeRow(" + detailIndex + ")'>取消</button>";
+                    row += "</td>";
+
+                    row += "</tr>";
+                    $('#productTabel').append(row);
+
+                    changeProduct(detailIndex);
+                    detailIndex++;
+                }
+            });
+            </text>
+        }
+        $("#addProduct").on("click", function () {
+            $.ajax({
+                type: "GET",
+                url: "/Sales/GetProductsDetailList",
+                dataType: "json",
+                success: function (result) {
+                    var row = "<tr id='row_" + detailIndex + "'>";
+                    // 商品
+                    row += "<td>";
+                    var productDropList = "<select name='Details[" + detailIndex + "].ProductID' id='product_" + detailIndex + "' class='form-control' onchange='changeProduct(" + detailIndex + ")'>";
+                    var list = result;
+                    for (var i = 0; i < list.length; i++) {
+                        productDropList += "<option value='" + list[i].Value + "'>" + list[i].Text + "</option>"
+                    }
+                    productDropList += "</select>";
+                    row += productDropList;
+                    row += "</td>";
+                    // 單價
+                    row += "<td class='col-xs-2'>";
+                    row += "<input type='text' name='Details[" + detailIndex + "].UnitPrice' id='price_" + detailIndex + "' value='0' class='form-control text-right price' onkeyup='changeTotal(" + detailIndex + ");'/>"
+                    row += "</td>";
+                    // 數量
+                    row += "<td class='col-xs-2'>";
+                    row += "<input type='number' name='Details[" + detailIndex + "].Qty'  id='num_" + detailIndex + "' class='form-control text-right' value='0' onchange='changeTotal(" + detailIndex + ");'/>"
+                    row += "</td>";
+                    // 小計
+                    row += "<td class='col-xs-2 text-center'>";
+                    row += "<span id='total_" + detailIndex + "'>0</span>"
+                    row += "</td>";
+                    // 按鈕
+                    row += "<td class='col-xs-2'>";
+                    row += "<button type='button'  class='btn' onclick='removeRow(" + detailIndex + ")'>取消</button>";
+                    row += "</td>";
+
+                    row += "</tr>";
+                    $('#productTabel').append(row);
+
+                    changeProduct(detailIndex);
+                    detailIndex++;
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        });
+
+
+    });
+    
+
+    function changeProduct(index) {
+        var val = $("#product_" + index).val();
+
+        $.ajax({
+            type: "GET",
+            url: "/Sales/GetProductPrice?ProductID=" + val,
+            dataType: "json",
+            success: function (result) {
+                $("#price_" + index).val(result);
+
+                changeTotal(index);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
+    function changeTotal(index) {
+        var new_price = $("#price_" + index).val();
+        var new_num = $("#num_" + index).val();
+
+        if ($("#price_" + index).val() == "") {
+            $("#price_" + index).val(0);
+            new_price = 0;
+        }
+
+        if ($("#num_" + index).val() == "") {
+            $("#num_" + index).val(0);
+            new_num = 0;
+        }
+
+        $("#total_" + index).text(new_price * new_num);
+    }
+
+    function removeRow(index) {
+        $("#row_" + index).hide();
+        $("#product_" + index).val(0);
+    }
+</script>
+<style>
+    #productTabel th {
+        text-align: center;
+    }
+</style>
