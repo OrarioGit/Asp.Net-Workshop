@@ -18,14 +18,14 @@
     <div class="form-group">
         <label class="control-label col-md-2">訂單編號</label>
         <div class="col-md-10">
-            <input type="text" name="OrderID" value="" class="form-control"/>
+            <input type="text" name="OrderID" value="" class="form-control kendoNum"/>
         </div>
     </div>
 
     <div class="form-group">
         @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxFor(model => model.ContactName, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.ContactName, new { @class = "form-control k-textbox" })
             @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -33,7 +33,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(model => model.EmployeeName, (IEnumerable<SelectListItem>)ViewBag.EmployeeList, "請選擇...", new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.EmployeeName, (IEnumerable<SelectListItem>)ViewBag.EmployeeList, "請選擇...", new { @class = "form-control kendoDrop" })
             @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -41,7 +41,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, "請選擇...", new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, "請選擇...", new { @class = "form-control kendoDrop" })
             @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -49,7 +49,7 @@
     <div class="form-group">
         <label class="control-label col-md-2">訂購日期</label>
         <div class="col-md-4">
-            <input type="date" name="OrderDate" value="" class="form-control kendoDate" />
+            <input type="date" name="OrderDate" value="" class=" kendoDate" />
         </div>
 
         <label class="control-label col-md-2">出貨日期</label>
@@ -94,5 +94,9 @@
 <script>
     $().ready(function () {
         $(".kendoDate").kendoDatePicker();
+
+        $(".kendoNum").kendoNumericTextBox();
+
+        $(".kendoDrop").kendoDropDownList();
     });
 </script>
