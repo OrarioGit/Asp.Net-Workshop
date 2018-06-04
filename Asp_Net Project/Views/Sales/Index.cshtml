@@ -49,19 +49,19 @@
     <div class="form-group">
         <label class="control-label col-md-2">訂購日期</label>
         <div class="col-md-4">
-            <input type="date" name="OrderDate" value="" class="form-control" />
+            <input type="date" name="OrderDate" value="" class="form-control kendoDate" />
         </div>
 
         <label class="control-label col-md-2">出貨日期</label>
         <div class="col-md-4">
-            <input type="date" name="ShippedDate" value="" class="form-control" />
+            <input type="date" name="ShippedDate" value="" class="form-control kendoDate" />
         </div>
     </div>
 
     <div class="form-group">
         <label class="control-label col-md-2">需要日期</label>
         <div class="col-md-4">
-            <input type="date" name="RequiredDate" value="" class="form-control" />
+            <input type="date" name="RequiredDate" value="" class="form-control kendoDate" />
         </div>
     </div>
 
@@ -90,3 +90,9 @@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $().ready(function () {
+        $(".kendoDate").kendoDatePicker();
+    });
+</script>
