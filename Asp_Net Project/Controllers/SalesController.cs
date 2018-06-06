@@ -720,44 +720,48 @@ namespace Asp_Net_Project.Controllers
                                                        ", @ProductID" +
                                                        ", @UnitPrice) ";
 
-            for (int i = 0; i < InsertData.Details.Count; i++)
+            if(InsertData.Details != null)
             {
-                if (InsertData.Details[i].ProductID == 0)
+                for (int i = 0; i < InsertData.Details.Count; i++)
                 {
-                    continue;
+                    if (InsertData.Details[i].ProductID == 0)
+                    {
+                        continue;
+                    }
+
+                    //宣告SQLCommand物件
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+
+                    cmd.Parameters.Add(new SqlParameter("@OrderID", new_Detail_OrderID));
+                    cmd.Parameters.Add(new SqlParameter("@ProductID", InsertData.Details[i].ProductID));
+                    cmd.Parameters.Add(new SqlParameter("@UnitPrice", InsertData.Details[i].UnitPrice));
+
+
+                    conn.Open();
+
+                    //從conn物件啟用Transaction
+                    SqlTransaction tran = conn.BeginTransaction();
+
+                    cmd.Transaction = tran;
+
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        tran.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+
                 }
-
-                //宣告SQLCommand物件
-                SqlCommand cmd = new SqlCommand(sql, conn);
-
-                cmd.Parameters.Add(new SqlParameter("@OrderID", new_Detail_OrderID));
-                cmd.Parameters.Add(new SqlParameter("@ProductID", InsertData.Details[i].ProductID));
-                cmd.Parameters.Add(new SqlParameter("@UnitPrice", InsertData.Details[i].UnitPrice));
-
-
-                conn.Open();
-
-                //從conn物件啟用Transaction
-                SqlTransaction tran = conn.BeginTransaction();
-
-                cmd.Transaction = tran;
-
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                    tran.Commit();
-                }
-                catch (Exception)
-                {
-                    tran.Rollback();
-                    throw;
-                }
-                finally
-                {
-                    conn.Close();
-                }
-
             }
+            
 
 
         }

@@ -7,7 +7,7 @@
 <h2>新增訂單頁面</h2>
 
 
-@using (Html.BeginForm("InsertOrders", "Sales"))
+@using (Html.BeginForm("InsertOrders", "Sales", new { @id = "insertForm"}))
 {
     @Html.AntiForgeryToken()
 
@@ -18,7 +18,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, "請選擇", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, new { @class = "form-control kendoDrop", required = "required" })
                 @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -26,7 +26,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, "請選擇", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, new { @class = "form-control kendoDrop", required = "required" })
                 @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -34,13 +34,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control" })
+                @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control kendoDate", required = "required" })
                 @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
             </div>
 
             @Html.LabelFor(model => model.RequiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control" })
+                @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control kendoDate", required = "required" })
                 @Html.ValidationMessageFor(model => model.RequiredDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -48,7 +48,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @class = "form-control" })
+                @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @class = "form-control kendoDate" })
                 @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -56,7 +56,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, "請選擇", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, new { @class = "form-control kendoDrop" })
                 @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -64,7 +64,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Freight, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.Freight, new { @type = "number", @class = "form-control" })
+                @Html.TextBoxFor(model => model.Freight, new { @type = "number", @class = "form-control k-textbox", required = "required", min = "1"})
                 @Html.ValidationMessageFor(model => model.Freight, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -72,13 +72,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control k-textbox" })
                 @Html.ValidationMessageFor(model => model.ShipCountry, "", new { @class = "text-danger" })
             </div>
 
             @Html.LabelFor(model => model.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control k-textbox" })
                 @Html.ValidationMessageFor(model => model.ShipCity, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -86,13 +86,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control k-textbox" })
                 @Html.ValidationMessageFor(model => model.ShipRegion, "", new { @class = "text-danger" })
             </div>
 
             @Html.LabelFor(model => model.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control k-textbox" })
                 @Html.ValidationMessageFor(model => model.ShipPostalCode, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -100,14 +100,14 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ShipAddress, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control k-textbox" })
                 @Html.ValidationMessageFor(model => model.ShipAddress, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="存檔" class="btn btn-default" />
+                <input id ="insertBtn" type="submit" value="存檔" class="btn btn-default" />
             </div>
         </div>
 
@@ -139,7 +139,22 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $(".kendoDate").kendoDatePicker();
+
+        $(".kendoDrop").kendoDropDownList({});
+
+        var validator = $("#insertForm").kendoValidator().data("kendoValidator");
+
         var detailIndex = 0;
+
+        $("#insertBtn").on("click", function () {
+            if (validator.validate()) {
+                // If the form is valid, the Validator will return true
+                save();
+            }
+        });
+
         $("#addProduct").on("click", function () {
             $.ajax({
                 type: "GET",

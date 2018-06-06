@@ -145,9 +145,31 @@
                             title: "發貨日期",
                             template: '#= kendo.toString(ShippedDate,"yyyy/MM/dd") #'
                         }, {
-                                command: { text: "修改"}, title: " ", width: "180px" 
+                                command: {
+                                    text: "修改",
+                                    click: function (e) {
+                                        // prevent page scroll position change
+                                        e.preventDefault();
+                                        // e.target is the DOM element representing the button
+                                        var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                                        // get the data bound to the current table row
+                                        var data = this.dataItem(tr);
+                                        window.location = '/Sales/EditOrders?id=' + data.OrderID;
+                                    }
+                                }, title: " ", width: "180px" 
                         }, {
-                                command: { text: "刪除" }, title: " ", width: "180px"
+                                command: {
+                                    text: "刪除",
+                                    click: function (e) {
+                                        // prevent page scroll position change
+                                        e.preventDefault();
+                                        // e.target is the DOM element representing the button
+                                        var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                                        // get the data bound to the current table row
+                                        var data = this.dataItem(tr);
+                                        window.location = '/Sales/DeleteOrders?id=' + data.OrderID;
+                                    }
+                                }, title: " ", width: "180px"
                         }]
                     });
                 }
