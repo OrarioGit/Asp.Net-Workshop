@@ -8,6 +8,7 @@ using System.Text;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace Asp_Net_Project.Controllers
 {
@@ -39,9 +40,15 @@ namespace Asp_Net_Project.Controllers
             return View();
         }
 
+        [HttpPost()]
+        public ActionResult index(Models.QueryViewModel QueryData)
+        {
+            return View();
+        }
+
         //POST: 查詢結果
         [HttpPost()]
-        public ActionResult QueryResult(Models.QueryViewModel QueryData)
+        public JsonResult QueryResult(Models.QueryViewModel QueryData)
         {
             DataTable QueryResult = SearchOrdersInfo( QueryData.OrderID
                                                     , QueryData.ContactName
@@ -61,7 +68,10 @@ namespace Asp_Net_Project.Controllers
             }
 
             ViewBag.QueryResult = QueryResult;
-            return View();
+
+            String result = DataTableToJSON(QueryResult);
+            return Json(result);
+            //return View();
         }
 
         //GET: 修改頁面
@@ -973,5 +983,15 @@ namespace Asp_Net_Project.Controllers
 
         }
 
+        /// <summary>
+        /// DataTable to JsonString
+        /// </summary>
+        /// <returns>JsonString</returns>
+        public string DataTableToJSON(DataTable table)
+        {
+            string JSONString = string.Empty;
+            JSONString = JsonConvert.SerializeObject(table);
+            return JSONString;
+        }
     }
 }

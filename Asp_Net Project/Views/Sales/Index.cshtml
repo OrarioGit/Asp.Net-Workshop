@@ -7,7 +7,7 @@
 <h2>訂單查詢頁面</h2>
 
 
-@using (Html.BeginForm("QueryResult","Sales")) 
+@using (Html.BeginForm("","Sales", FormMethod.Post, new { id = "postForm"}))
 {
     @Html.AntiForgeryToken()
     
@@ -17,15 +17,15 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
         <label class="control-label col-md-2">訂單編號</label>
-        <div class="col-md-10">
-            <input type="text" name="OrderID" value="" class="form-control kendoNum"/>
+        <div class="col-md-10" style="display: block">
+            <input type="text" name="OrderID" value="" class="form-control k-textbox"/>
         </div>
     </div>
 
     <div class="form-group">
         @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxFor(model => model.ContactName, new { @class = "form-control k-textbox" })
+            @Html.TextBoxFor(model => model.ContactName, new { @class = "form-control k-textbox"})
             @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -67,7 +67,7 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-4">
-            <input type="submit" value="查詢" class="btn btn-default" />
+            <input type="submit" value="查詢" id="searchBtn" class="btn btn-default" />
             <input type="reset" value="清除" class="btn btn-default" />
             @*<button class="btn btn-success" onclick="location.href='/Sales/InsertOrders'">新增</button>*@
         </div>
@@ -87,6 +87,8 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
+<div id="grid"></div>
+
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
@@ -95,8 +97,63 @@
     $().ready(function () {
         $(".kendoDate").kendoDatePicker();
 
-        $(".kendoNum").kendoNumericTextBox();
-
         $(".kendoDrop").kendoDropDownList();
+
+        $('#searchBtn').on("click",function () {
+            
+            $.ajax({
+                url: "@Url.Action("QueryResult")",
+                type: "POST",
+                data: $("#postForm").serialize(),
+                success: function (result) {
+                    result = JSON.parse(result);
+                    console.log(result);
+                    $("#grid").kendoGrid({
+                        dataSource: {
+                            data: result,
+                            schema: {
+                                model: {
+                                    fields: {
+                                        OrderID: { type: "number" },
+                                        CompanyName: { type: "string" },
+                                        OrderDate: { type: "date" },
+                                        ShippedDate: { type: "date" }
+                                    }
+                                }
+                            },
+                            pageSize: 20
+                        },
+                        groupable: true,
+                        sortable: true,
+                        pageable: {
+                            refresh: true,
+                            pageSizes: true,
+                            buttonCount: 5
+                        },
+                        columns: [{
+                            field: "OrderID",
+                            title: "訂單編號"
+                        }, {
+                            field: "CompanyName",
+                            title: "客戶名稱"
+                        }, {
+                            field: "OrderDate",
+                            title: "訂單日期",
+                            template: '#= kendo.toString(OrderDate,"yyyy/MM/dd") #'
+                        }, {
+                            field: "ShippedDate",
+                            title: "發貨日期",
+                            template: '#= kendo.toString(ShippedDate,"yyyy/MM/dd") #'
+                        }, {
+                                command: { text: "修改"}, title: " ", width: "180px" 
+                        }, {
+                                command: { text: "刪除" }, title: " ", width: "180px"
+                        }]
+                    });
+                }
+            });
+            return false;
+        });
+        
     });
 </script>
