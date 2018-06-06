@@ -123,6 +123,8 @@
                 </tr>
             </thead>
         </table>
+
+        <div id="grid"></div>
     </div>
 }
 
@@ -147,6 +149,17 @@
         var validator = $("#insertForm").kendoValidator().data("kendoValidator");
 
         var detailIndex = 0;
+
+        $("#grid").kendoGrid({
+            toolbar: ["create"],
+            columns: [
+                { field: "ProductID", title: "商品"},
+                { field: "UnitPrice", title: "單價", format: "{0:c}", width: 120 },
+                { field: "Qty", title: "數量", width: 120 },
+                "小計",
+                { command: "destroy", title: "&nbsp;", width: 150 }],
+            editable: true
+        });
 
         $("#insertBtn").on("click", function () {
             if (validator.validate()) {
