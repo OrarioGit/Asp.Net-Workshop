@@ -151,15 +151,41 @@
         var detailIndex = 0;
 
         $("#grid").kendoGrid({
+            dataSource: {
+                schema: {
+                    model: {
+                        fields: {
+                            ProductID: { defaultValue: { ProductID: 1, ProductName: "test" } },
+                            UnitPrice: { type: "number" },
+                            Qty: { type: "number" },
+                            total: { type: "number" }
+                        }
+                    }
+                }
+            },
             toolbar: ["create"],
             columns: [
-                { field: "ProductID", title: "商品"},
-                { field: "UnitPrice", title: "單價", format: "{0:c}", width: 120 },
-                { field: "Qty", title: "數量", width: 120 },
-                "小計",
-                { command: "destroy", title: "&nbsp;", width: 150 }],
+                { field: "ProductID", title: "商品", width: 200, editor: productDropDownEditor},
+                { field: "UnitPrice", title: "單價", format: "{0:c}", width: 200 },
+                { field: "Qty", title: "數量", width: 200 },
+                { field: "total", title: "小計", width: 200},
+                { command: "destroy", title: "&nbsp;", width: 200 }],
             editable: true
         });
+
+        function productDropDownEditor(container, options) {
+            $('<input required name="' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    dataTextField: "ProductName",
+                    dataValueField: "ProductID",
+                    dataSource: {
+                        data: [{ "ProductName": "test", "ProductID": 1 },
+                            { "ProductName": "test2", "ProductID": 2}]
+                    }
+                })
+        }
 
         $("#insertBtn").on("click", function () {
             if (validator.validate()) {
