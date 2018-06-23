@@ -7,7 +7,7 @@
 <h2>新增訂單頁面</h2>
 
 
-@using (Html.BeginForm("InsertOrders", "Sales", new { @id = "insertForm"}))
+@using (Html.BeginForm("InsertOrders", "Sales", FormMethod.Post, new { @id = "insertForm"}))
 {
     @Html.AntiForgeryToken()
 
@@ -19,7 +19,6 @@
             @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, new { @class = "form-control kendoDrop", required = "required" })
-                @Html.ValidationMessageFor(model => model.ContactName, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -27,7 +26,6 @@
             @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, new { @class = "form-control kendoDrop", required = "required" })
-                @Html.ValidationMessageFor(model => model.EmployeeName, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -35,21 +33,18 @@
             @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control kendoDate", required = "required" })
-                @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
             </div>
 
             @Html.LabelFor(model => model.RequiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control kendoDate", required = "required" })
-                @Html.ValidationMessageFor(model => model.RequiredDate, "", new { @class = "text-danger" })
-            </div>
+             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @class = "form-control kendoDate" })
-                @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -57,7 +52,6 @@
             @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, new { @class = "form-control kendoDrop" })
-                @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -65,7 +59,6 @@
             @Html.LabelFor(model => model.Freight, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextBoxFor(model => model.Freight, new { @type = "number", @class = "form-control k-textbox", required = "required", min = "1"})
-                @Html.ValidationMessageFor(model => model.Freight, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -73,13 +66,11 @@
             @Html.LabelFor(model => model.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control k-textbox" })
-                @Html.ValidationMessageFor(model => model.ShipCountry, "", new { @class = "text-danger" })
             </div>
 
             @Html.LabelFor(model => model.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control k-textbox" })
-                @Html.ValidationMessageFor(model => model.ShipCity, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -87,13 +78,11 @@
             @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control k-textbox" })
-                @Html.ValidationMessageFor(model => model.ShipRegion, "", new { @class = "text-danger" })
             </div>
 
             @Html.LabelFor(model => model.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
                 @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control k-textbox" })
-                @Html.ValidationMessageFor(model => model.ShipPostalCode, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -101,7 +90,6 @@
             @Html.LabelFor(model => model.ShipAddress, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control k-textbox" })
-                @Html.ValidationMessageFor(model => model.ShipAddress, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -133,7 +121,62 @@
     @Html.ActionLink("回前一頁", "Index")
 </div>
 
+<style>
+    .k-header {
+        background-color: #fff;
+    }
+    /*toolTip 的顏色*/
+    .k-widget.k-tooltip {
+        border-color: rgb(197, 197, 197);
+        background-color: #F20C00;
+        color: white;
+    }
 
+    /*讓textbox顯示有紅框,因為此方法為預設的行為。*/
+    .k-invalid,
+    .k-textbox.k-invalid {
+        border: 1px solid #ee0101;
+    }
+
+    /*加入紅框給kendo ui的元件使用*/
+    .UIBorderRed {
+        border: 1px solid #ee0101 !important;
+    }
+
+    /*預設的errorTip樣式*/
+    .errorTip {
+        background-color: #ee0101;
+        color: #fff;
+        float: right;
+        font-size: 12px;
+        border: 2px solid #ddd;
+        -moz-box-shadow: 0 0 6px #000;
+        -webkit-box-shadow: 0 0 6px #000;
+        padding: 4px 10px 4px 10px;
+        border-radius: 6px;
+        -webkit-border-radius: 6px;
+        position: absolute;
+        opacity: 0.87;
+        display: none !important;
+    }
+    /*顯示的errorTip樣式*/
+    .errorTipShow {
+        background-color: #ee0101;
+        color: #fff;
+        float: right;
+        font-size: 12px;
+        border: 2px solid #ddd;
+        -moz-box-shadow: 0 0 6px #000;
+        -webkit-box-shadow: 0 0 6px #000;
+        padding: 4px 10px 4px 10px;
+        border-radius: 6px;
+        -webkit-border-radius: 6px;
+        position: fixed;
+        opacity: 0.87;
+        display: block !important;
+        ;
+    }
+</style>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
@@ -145,7 +188,9 @@
         $(".kendoDate").kendoDatePicker();
 
         $(".kendoDrop").kendoDropDownList({});
-
+        
+        $("#insertForm").kendoValidator({
+         });
         var validator = $("#insertForm").kendoValidator().data("kendoValidator");
 
         var detailIndex = 0;
@@ -155,7 +200,7 @@
                 schema: {
                     model: {
                         fields: {
-                            ProductID: { defaultValue: { ProductID: 1, ProductName: "test" } },
+                            Product: {},
                             UnitPrice: { type: "number" },
                             Qty: { type: "number" },
                             total: { type: "number" }
@@ -165,15 +210,49 @@
             },
             toolbar: ["create"],
             columns: [
-                { field: "ProductID", title: "商品", width: 200, editor: productDropDownEditor},
+                { field: "Product", title: "商品", width: 200, editor: productDropDownEditor},
                 { field: "UnitPrice", title: "單價", format: "{0:c}", width: 200 },
                 { field: "Qty", title: "數量", width: 200 },
                 { field: "total", title: "小計", width: 200},
                 { command: "destroy", title: "&nbsp;", width: 200 }],
-            editable: true
+            editable: true,
+            save: function (data) {
+                if (data.values.Qty) {
+                    data.model.set("total", data.values.Qty * data.model.UnitPrice);
+                }
+                else {
+                    data.model.set("total", data.model.Qty * data.values.UnitPrice);
+                }
+            }
         });
 
+        function onChangeValue(e) {
+            var grid = e.sender.element.closest(".k-grid").data("kendoGrid");
+            var row = e.sender.element.closest("tr");
+            var dataItem = grid.dataItem(row);
+
+            console.log("t");
+            console.log(dataItem);
+        }
+
         function productDropDownEditor(container, options) {
+            console.log(options.field);
+            var listData = "";
+
+            //如果沒接收過list的資料執行ajax
+            if (listData == "") {
+                $.ajax({
+                    url: "GetProductsList",
+                    type: "POST",
+                    async: false,
+                    success: function (data) {
+
+                        listData = JSON.parse(data);
+                        console.log(listData);
+                    }
+                });
+            };
+            console.log(container);
             $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
                 .kendoDropDownList({
@@ -181,10 +260,36 @@
                     dataTextField: "ProductName",
                     dataValueField: "ProductID",
                     dataSource: {
-                        data: [{ "ProductName": "test", "ProductID": 1 },
-                            { "ProductName": "test2", "ProductID": 2}]
-                    }
+                        data: listData
+                    },
+                    change: onChange,
                 })
+        };
+
+        function onChange(e) {
+            var grid = e.sender.element.closest(".k-grid").data("kendoGrid");
+            var row = e.sender.element.closest("tr");
+            var dataItem = grid.dataItem(row);
+
+
+            $.ajax({
+                type: "GET",
+                url: "/Sales/GetProductPrice?ProductID=" + dataItem.Product,
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    dataItem.set("UnitPrice", result);
+
+                    var totalValue = dataItem.UnitPrice * dataItem.Qty;
+
+                    dataItem.set("total", totalValue);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+            
+            console.log(dataItem);
         }
 
         $("#insertBtn").on("click", function () {

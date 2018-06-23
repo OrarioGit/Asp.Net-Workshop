@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Asp_Net_Project.Controllers
 {
@@ -89,19 +90,7 @@ namespace Asp_Net_Project.Controllers
             //查詢訂單資料
             DataTable QueryResult = SearchOrderInfo(id);
             DataTable QueryDetalResult = SearchOrderDetailInfo(id);
-
-            //int list_index = OrderList.IndexOf(OrderList.Find(item => item.OrderID == id)); 
             
-            /*下次撰寫選單設定*/
-            //設定下拉式選單預設值
-            //var Edit_CustomerList = CustomerList;
-            //Edit_CustomerList[CN_List_ID].Selected = true;
-
-            //var Edit_EmployeeList = EmployeeList;
-            //Edit_EmployeeList[EN_List_ID].Selected = true;
-
-            //var Edit_ShippersList = ShippersList;
-            //Edit_ShippersList[CpN_List_ID].Selected = true;
 
             ViewBag.ContactName = CustomerList;
 
@@ -261,6 +250,20 @@ namespace Asp_Net_Project.Controllers
         }
 
         /// <summary>
+        /// 取得產品名稱下拉式選單Json
+        /// </summary>
+        /// <returns>產品名稱下拉式選單Json</returns>
+        [HttpPost()]
+        public JsonResult GetProductsList()
+        {
+            DataTable ProductsInfo = SearchProductsInfo();
+
+            String result = DataTableToJSON(ProductsInfo);
+            return Json(result);
+        }
+
+
+        /// <summary>
         /// 取得連線字串
         /// </summary>
         /// <returns>連線字串</returns>
@@ -345,7 +348,7 @@ namespace Asp_Net_Project.Controllers
 
             SqlConnection conn = new SqlConnection(connStr);
 
-            string sql = "Select ProductID, ProductName " +
+            string sql = "Select ProductName, ProductID " +
                          "From [Production].[Products]";
 
             SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, conn);
