@@ -203,7 +203,7 @@
                             Product: {},
                             UnitPrice: { type: "number" },
                             Qty: { type: "number" },
-                            total: { type: "number" }
+                            total: { type: "number"}
                         }
                     }
                 }
@@ -215,6 +215,13 @@
                 { field: "Qty", title: "數量", width: 200 },
                 { field: "total", title: "小計", width: 200},
                 { command: "destroy", title: "&nbsp;", width: 200 }],
+            dataBound: function (e) {
+                
+                $('.k-grid-add').click(function () {
+                    var items = e.sender.items();
+                    var dataItems = e.sender.dataItems();
+                })
+            },
             editable: true,
             save: function (data) {
                 if (data.values.Qty) {
@@ -226,17 +233,7 @@
             }
         });
 
-        function onChangeValue(e) {
-            var grid = e.sender.element.closest(".k-grid").data("kendoGrid");
-            var row = e.sender.element.closest("tr");
-            var dataItem = grid.dataItem(row);
-
-            console.log("t");
-            console.log(dataItem);
-        }
-
         function productDropDownEditor(container, options) {
-            console.log(options.field);
             var listData = "";
 
             //如果沒接收過list的資料執行ajax
@@ -248,11 +245,9 @@
                     success: function (data) {
 
                         listData = JSON.parse(data);
-                        console.log(listData);
                     }
                 });
             };
-            console.log(container);
             $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
                 .kendoDropDownList({
@@ -288,8 +283,6 @@
                     console.log(err);
                 }
             });
-            
-            console.log(dataItem);
         }
 
         $("#insertBtn").on("click", function () {
