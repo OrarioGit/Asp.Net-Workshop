@@ -7,118 +7,120 @@
 <h2>EditOrders</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("EditOrders", "Sales", FormMethod.Post, new { @id = "EditForm" }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>InserViewModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control k-textbox", @readonly = "readonly", @Value = @ViewBag.OrderInfo.Rows[0]["OrderID"] } })
-            </div>
+<div class="form-horizontal">
+    <h4>InserViewModel</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control k-textbox", @readonly = "readonly", @Value = @ViewBag.OrderInfo.Rows[0]["OrderID"] } })
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, new { @class = "form-control kendoDrop" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, new { @class = "form-control kendoDrop" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control kendodate", @Value = @ViewBag.OrderInfo.Rows[0]["OrderDate"].ToString("yyyy/MM/dd") })
-            </div>
-
-            @Html.LabelFor(model => model.RequiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control kendodate", @Value = @ViewBag.OrderInfo.Rows[0]["RequiredDate"].ToString("yyyy/MM/dd") })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @class = "form-control kendodate", @Value = @ViewBag.OrderInfo.Rows[0]["ShippedDate"].ToString("yyyy/MM/dd") })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, new { @class = "form-control kendoDrop" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Freight, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.Freight, new { @type = "number", @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["Freight"] })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["ShipCountry"] })
-            </div>
-
-            @Html.LabelFor(model => model.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["ShipCity"] })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["ShipRegion"] })
-            </div>
-
-            @Html.LabelFor(model => model.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["ShipPostalCode"] })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ShipAddress, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["ShipAddress"] })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-
-        <a id="addProduct">+新增商品</a>
-        <table class="table table-hover text-center" id="productTabel">
-            <thead>
-                <tr>
-                    <th>商品</th>
-                    <th>單價</th>
-                    <th>數量</th>
-                    <th>小計</th>
-                    <th></th>
-                </tr>
-            </thead>
-        </table>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ContactName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.ContactName, (List<SelectListItem>)ViewBag.ContactName, new { @class = "form-control kendoDrop", required = "required" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.EmployeeName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.EmployeeName, (List<SelectListItem>)ViewBag.EmployeeName, new { @class = "form-control kendoDrop", required = "required" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.OrderDate, new { @type = "date", @class = "form-control kendodate", @Value = @ViewBag.OrderInfo.Rows[0]["OrderDate"].ToString("yyyy-MM-dd"), required = "required" })
+        </div>
+
+        @Html.LabelFor(model => model.RequiredDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.RequiredDate, new { @type = "date", @class = "form-control kendodate", @Value = @ViewBag.OrderInfo.Rows[0]["RequiredDate"].ToString("yyyy-MM-dd"), required = "required" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShippedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ShippedDate, new { @type = "date", @class = "form-control kendodate", @Value = @ViewBag.OrderInfo.Rows[0]["ShippedDate"].ToString("yyyy-MM-dd") })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.CompanyName, (List<SelectListItem>)ViewBag.CompanyName, new { @class = "form-control kendoDrop" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Freight, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Freight, new { @type = "number", @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["Freight"], required = "required", min = "1" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.ShipCountry, new { @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["ShipCountry"] })
+        </div>
+
+        @Html.LabelFor(model => model.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.ShipCity, new { @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["ShipCity"] })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.ShipRegion, new { @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["ShipRegion"] })
+        </div>
+
+        @Html.LabelFor(model => model.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextBoxFor(model => model.ShipPostalCode, new { @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["ShipPostalCode"] })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ShipAddress, new { @class = "form-control k-textbox", @Value = @ViewBag.OrderInfo.Rows[0]["ShipAddress"] })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+
+    <a id="addProduct">+新增商品</a>
+    <table class="table table-hover text-center" id="productTabel">
+        <thead>
+            <tr>
+                <th>商品</th>
+                <th>單價</th>
+                <th>數量</th>
+                <th>小計</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+
+    <div id="grid"></div>
+</div>
 }
 
 <div>
@@ -193,8 +195,99 @@
     $(document).ready(function () {
         $(".kendoDate").kendoDatePicker();
 
-        $(".kendoDrop").kendoDropDownList({});
+        $(".kendoDrop").kendoDropDownList();
 
+        $("#EditForm").kendoValidator();
+
+        $("#grid").kendoGrid({
+            dataSource: {
+                schema: {
+                    model: {
+                        fields: {
+                            Product: {},
+                            UnitPrice: { type: "number" },
+                            Qty: { type: "number" },
+                            total: { type: "number" }
+                        }
+                    }
+                }
+            },
+            toolbar: ["create"],
+            columns: [
+                { field: "Product", title: "商品", width: 200, editor: productDropDownEditor },
+                { field: "UnitPrice", title: "單價", format: "{0:c}", width: 200 },
+                { field: "Qty", title: "數量", width: 200 },
+                { field: "total", title: "小計", width: 200 },
+                { command: "destroy", title: "&nbsp;", width: 200 }],
+            editable: true,
+            save: function (data) {
+                if (data.values.Qty) {
+                    data.model.set("total", data.values.Qty * data.model.UnitPrice);
+                }
+                else {
+                    data.model.set("total", data.model.Qty * data.values.UnitPrice);
+                }
+            }
+        });
+
+        function productDropDownEditor(container, options) {
+            var listData = "";
+
+            //如果沒接收過list的資料執行ajax
+            if (listData == "") {
+                $.ajax({
+                    url: "GetProductsList",
+                    type: "POST",
+                    async: false,
+                    success: function (data) {
+
+                        listData = JSON.parse(data);
+                    }
+                });
+            };
+            $('<input required name="' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    dataTextField: "ProductName",
+                    dataValueField: "ProductID",
+                    dataSource: {
+                        data: listData
+                    },
+                    change: onChange,
+                })
+        };
+
+        function onChange(e) {
+            var grid = e.sender.element.closest(".k-grid").data("kendoGrid");
+            var row = e.sender.element.closest("tr");
+            var dataItem = grid.dataItem(row);
+
+
+            $.ajax({
+                type: "GET",
+                url: "/Sales/GetProductPrice?ProductID=" + dataItem.Product,
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    dataItem.set("UnitPrice", result);
+
+                    var totalValue = dataItem.UnitPrice * dataItem.Qty;
+
+                    dataItem.set("total", totalValue);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+
+        $("#insertBtn").on("click", function () {
+            if (validator.validate()) {
+                // If the form is valid, the Validator will return true
+                save();
+            }
+        });
 
         @for (int x = 0; x < ViewBag.OrderDetailInfo.Rows.Count; x++){
             <text>
